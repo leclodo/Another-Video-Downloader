@@ -1,0 +1,7 @@
+# Required
+yt-dlp[default]
+pillow
+# Optional: "minimize to the notification area" option
+pystray
+# Only to build the .exe (done by build_exe.bat)
+# pyinstaller
