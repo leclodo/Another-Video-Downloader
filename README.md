@@ -4,7 +4,11 @@
 
 Une interface graphique simple pour [yt-dlp](https://github.com/yt-dlp/yt-dlp) : colle un lien, choisis la qualité, télécharge. Pour Windows (Python + Tkinter), libre et open source.
 
+<img width="1082" height="430" alt="Fenêtre principale : collez un lien, chargez la vidéo, puis choisissez la qualité et une découpe début/fin optionnelle." src="https://github.com/user-attachments/assets/24ec3dbc-8d6d-4575-9e43-97adc4aae01d" />
+
 ## Fonctions
+
+<img width="1082" height="596" alt="File d’attente avec qualité et découpe par vidéo, réordonnancement par glisser-déposer, progression individuelle et pause/reprise." src="https://github.com/user-attachments/assets/3b80d26f-3174-4a77-9c46-6c8b6a753d74" />
 
 - **Téléchargement** de vidéos YouTube et des autres sites pris en charge par yt-dlp, en qualité au choix ou en **MP3**
 - **File d'attente** : plusieurs téléchargements, pause / reprise, réordonnancement par glisser-déposer, tri par colonne, sauvegarde automatique de la file entre deux lancements
@@ -16,6 +20,8 @@ Une interface graphique simple pour [yt-dlp](https://github.com/yt-dlp/yt-dlp) :
 - **Notifications** : son et bulle de fin de téléchargement, son d'erreur, 3 styles de bulle, volume réglable
 - **Thèmes** : sombre, clair, sakura, cyberpunk, hacker ; **français / anglais**
 - **Fenêtre de logs** pour le débogage, réduction dans la zone de notification
+
+<img width="508" height="82" alt="Notification de fin de téléchargement avec miniature, titre et boutons pour ouvrir le dossier ou lire le fichier." src="https://github.com/user-attachments/assets/112e407e-4157-4f92-8c97-4562cc8ed5a2" />
 
 ## Installation
 
