@@ -1,5 +1,5 @@
 @echo off
-rem Builds dist\Another Video Downloader.exe with yt-dlp, Pillow, ffmpeg and an icon included.
+rem Builds the PORTABLE version: dist\Another-Video-Downloader-Portable.exe with yt-dlp, Pillow, ffmpeg and an icon included.
 rem Put this file, make_icon.py and the fonts folder next to yt_downloader.py, then double-click it.
 rem ffmpeg.exe and ffprobe.exe are used from this folder if present,
 rem otherwise they are downloaded once from gyan.dev (about 90 MB).
@@ -36,7 +36,7 @@ if not exist ffprobe.exe (
   exit /b 1
 )
 
-python -m PyInstaller --noconfirm --clean --onefile --windowed --name "Another Video Downloader" --icon icon.ico --add-data "icon.ico;." --add-data "fonts;fonts" --collect-all yt_dlp --collect-all yt_dlp_ejs --hidden-import pystray._win32 --add-binary "ffmpeg.exe;." --add-binary "ffprobe.exe;." yt_downloader.py
+python -m PyInstaller --noconfirm --clean --onefile --windowed --name "Another-Video-Downloader-Portable" --icon icon.ico --add-data "icon.ico;." --add-data "fonts;fonts" --collect-all yt_dlp --collect-all yt_dlp_ejs --hidden-import pystray._win32 --add-binary "ffmpeg.exe;." --add-binary "ffprobe.exe;." yt_downloader.py
 if errorlevel 1 (
   echo PyInstaller failed.
   pause
@@ -44,5 +44,5 @@ if errorlevel 1 (
 )
 
 echo.
-echo Done: dist\Another Video Downloader.exe
+echo Done: dist\Another-Video-Downloader-Portable.exe
 pause

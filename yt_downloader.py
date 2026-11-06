@@ -6,6 +6,7 @@ Requirements / Prérequis :
     ffmpeg in PATH (MP3, trimming, video + audio merge)  ->  winget install ffmpeg
 """
 
+import gc
 import io
 import json
 import math
@@ -115,19 +116,57 @@ def _hide_console():
 
 _setup_ffmpeg_path()
 
-try:
-    import yt_dlp  # noqa: E402
-    from yt_dlp.utils import download_range_func, sanitize_filename  # noqa: E402
-except Exception:
-    if not os.path.isdir(YT_OVERRIDE):
-        raise
-    # A broken downloaded update: drop it and fall back to the version packed in the .exe.
-    for _m in [m for m in sys.modules if m.split(".")[0] in ("yt_dlp", "yt_dlp_ejs")]:
-        del sys.modules[_m]
-    sys.path[:] = [p for p in sys.path if p != YT_OVERRIDE]
-    shutil.rmtree(YT_OVERRIDE, ignore_errors=True)
-    import yt_dlp  # noqa: E402
-    from yt_dlp.utils import download_range_func, sanitize_filename  # noqa: E402
+# yt-dlp is heavy to import (~1-2 s): it loads in a background thread while the window is built.
+# The names below wait for it when first used, so the rest of the code does not change.
+_YT = {}
+_YT_READY = threading.Event()
+
+
+def _load_ytdlp():
+    try:
+        try:
+            import yt_dlp as mod
+            from yt_dlp.utils import download_range_func as rng, sanitize_filename as san
+        except Exception:
+            if not os.path.isdir(YT_OVERRIDE):
+                raise
+            # A broken downloaded update: drop it and fall back to the version packed in the .exe.
+            for _m in [m for m in sys.modules if m.split(".")[0] in ("yt_dlp", "yt_dlp_ejs")]:
+                del sys.modules[_m]
+            sys.path[:] = [p for p in sys.path if p != YT_OVERRIDE]
+            shutil.rmtree(YT_OVERRIDE, ignore_errors=True)
+            import yt_dlp as mod
+            from yt_dlp.utils import download_range_func as rng, sanitize_filename as san
+        _YT.update(mod=mod, range=rng, san=san)
+    except BaseException as e:
+        _YT["error"] = e
+    finally:
+        _YT_READY.set()
+
+
+def _yt(key):
+    _YT_READY.wait()
+    if "error" in _YT:
+        raise _YT["error"]
+    return _YT[key]
+
+
+class _LazyYt:
+    def __getattr__(self, name):
+        return getattr(_yt("mod"), name)
+
+
+yt_dlp = _LazyYt()
+
+
+def download_range_func(*a, **k):
+    return _yt("range")(*a, **k)
+
+
+def sanitize_filename(*a, **k):
+    return _yt("san")(*a, **k)
+
+
 from PIL import Image, ImageDraw, ImageTk  # noqa: E402
 try:                                  # optional: notification-area icon ("close to tray")
     import pystray  # noqa: E402
@@ -443,6 +482,10 @@ T = {
         "info_check": "Vérifier les mises à jour",
         "info_checking": "Vérification…",
         "info_update": "Mettre à jour",
+        "app_body": "Cette application. La mise à jour télécharge le nouvel installeur depuis GitHub, l'installe et relance l'app.",
+        "app_busy": "Des téléchargements sont en cours : attends qu'ils se terminent avant de mettre à jour.",
+        "app_manual": "Mise à jour automatique disponible seulement avec la version installée. Télécharge la nouvelle version sur GitHub.",
+        "app_github": "Page des versions (GitHub)",
         "info_updating": "Mise à jour… (patiente)",
         "info_updated_restart": "mis à jour — relance l'appli pour l'appliquer",
         "info_updated": "mis à jour",
@@ -600,6 +643,10 @@ T = {
         "info_check": "Check for updates",
         "info_checking": "Checking…",
         "info_update": "Update",
+        "app_body": "This application. Updating downloads the new installer from GitHub, installs it and restarts the app.",
+        "app_busy": "Downloads are running: wait for them to finish before updating.",
+        "app_manual": "Automatic update is only available with the installed version. Download the new version from GitHub.",
+        "app_github": "Releases page (GitHub)",
         "info_updating": "Updating… (please wait)",
         "info_updated_restart": "updated — restart the app to apply",
         "info_updated": "updated",
@@ -869,8 +916,8 @@ def log(msg, level="info"):
     """Adds a line to the in-app log (thread-safe, capped)."""
     with LOG_LOCK:
         for line in str(msg).splitlines() or [""]:
-            LOG.append((time.strftime("%H:%M:%S"), level, line[:2000]))
-        del LOG[:-5000]
+            LOG.append((time.strftime("%H:%M:%S"), level, line[:800]))
+        del LOG[:-3000]
 
 
 class QuietLogger:
@@ -1271,8 +1318,42 @@ def latest_ffmpeg():
 FFMPEG_ZIP = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 
+APP_VERSION = "1.1.0"
+APP_REPO = "leclodo/Another-Video-Downloader"
+APP_RELEASES_URL = f"https://github.com/{APP_REPO}/releases"
+
+
+def latest_app():
+    """(version, installer url) of the latest GitHub release of the app, or (None, None)."""
+    try:
+        d = _http_json(f"https://api.github.com/repos/{APP_REPO}/releases/latest")
+        ver = str(d.get("tag_name", "")).lstrip("vV")
+        url = next((a["browser_download_url"] for a in d.get("assets", [])
+                    if a.get("name", "").lower().endswith("installer.exe")), None)
+        return ver or None, url
+    except Exception:
+        return None, None
+
+
+APP_UPDATE = {"url": None, "version": None}      # filled by the check (installer asset of the newer release)
+
+
+def update_app():
+    """Downloads the installer of the latest release and runs it silently (it restarts the app)."""
+    ver, url = latest_app()
+    if not url or not newer(ver, APP_VERSION):
+        raise RuntimeError("no installer found")
+    dest = os.path.join(tempfile.gettempdir(), "Another-Video-Downloader-Installer.exe")
+    _download(url, dest)
+    flags = 0x00000008 | 0x00000200 if sys.platform.startswith("win") else 0   # detached: survives our exit
+    subprocess.Popen([dest, "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/CLOSEAPPLICATIONS"],
+                     creationflags=flags, close_fds=True)
+
+
 def can_update(key):
     """Whether the app knows how to update this component by itself."""
+    if key == "app":
+        return sys.platform.startswith("win") and bool(getattr(sys, "frozen", False))
     if key == "yt-dlp":
         return True
     win = sys.platform.startswith("win")
@@ -1391,10 +1472,26 @@ def apply_titlebar_theme(win):
         pass
 
 
+def trim_memory():
+    """Gives back what Python no longer uses (garbage + Windows working set): lowers the RAM shown."""
+    try:
+        gc.collect()
+        if sys.platform.startswith("win"):
+            import ctypes
+            ctypes.windll.kernel32.SetProcessWorkingSetSize(ctypes.windll.kernel32.GetCurrentProcess(),
+                                                            ctypes.c_size_t(-1), ctypes.c_size_t(-1))
+    except Exception:
+        pass
+
+
 def fetch_image(url):
     try:
         with urlopen(url, timeout=10) as r:
-            return Image.open(io.BytesIO(r.read())).convert("RGB")
+            img = Image.open(io.BytesIO(r.read()))
+            img.draft("RGB", (640, 360))                  # JPEG: decoded already reduced
+            img = img.convert("RGB")
+            img.thumbnail((640, 360), Image.Resampling.BILINEAR)   # never keep a full 1280x720 bitmap per video
+            return img
     except Exception:
         return None
 
@@ -1759,7 +1856,9 @@ def start_listener(events):
                 u = None
             finally:
                 conn.close()
-            if u and len(u) < 4000 and u.startswith(("http://", "https://")):
+            if u == "show":                      # plain relaunch: just bring the window back
+                events.put(("external", ""))
+            elif u and len(u) < 4000 and u.startswith(("http://", "https://")):
                 events.put(("external", u))
     threading.Thread(target=loop, daemon=True).start()
 
@@ -2250,6 +2349,9 @@ class App(tk.Tk):
         self.bind_all("<Button-1>", self._defocus_click, add="+")
         self.after(100, self._poll)
         start_listener(self.events)      # links sent by a second launch
+        self.after(4000, trim_memory)
+        if can_update("app"):
+            self.after(6000, lambda: threading.Thread(target=self._bg_app_check, daemon=True).start())    # startup done: drop what was only needed to start
         if initial_url:                  # launched with a link
             self.after(300, lambda: self._open_external(initial_url))
 
@@ -2267,8 +2369,9 @@ class App(tk.Tk):
                 self.focus_force()
         except tk.TclError:
             pass
-        self.url_var.set(url)
-        self.load()
+        if url:
+            self.url_var.set(url)
+            self.load()
 
     # ---------------------------------------------------------- window position
     def _restore_position(self):
@@ -2311,6 +2414,7 @@ class App(tk.Tk):
         self._tray = pystray.Icon("justayt", tray_image(), tr("title"), menu)
         self._tray.run_detached()
         self.withdraw()
+        self.after(1500, trim_memory)
 
     def _from_tray(self):
         if self._tray is not None:
@@ -3643,7 +3747,7 @@ class App(tk.Tk):
         def section(title, body, command, links):
             head = tk.Frame(inner, bg=CARD)
             head.pack(anchor="w")
-            lbl(head, title, 14, FG, bold=True).pack(side="left")
+            lbl(head, tr("title") if title == "app" else title, 14, FG, bold=True).pack(side="left")
             self.chk[title] = lbl(head, "", 11, MUTED, bold=True)
             self.chk[title].pack(side="left", padx=(12, 0))
             holder = tk.Frame(inner, bg=CARD)  # zero height while the button is hidden
@@ -3664,6 +3768,9 @@ class App(tk.Tk):
                 link.pack(anchor="w", pady=2)
                 link.bind("<Button-1>", lambda e, u=url: webbrowser.open(u))
 
+        section("app", tr("app_body") if can_update("app") else tr("app_manual"), None,
+                [(tr("app_github"), APP_RELEASES_URL)])
+        tk.Frame(inner, bg=BORDER, height=1).pack(fill="x", pady=16)
         bundled = getattr(sys, "frozen", False)  # the .exe already contains yt-dlp
         section("yt-dlp", tr("info_ytdlp_bundled" if bundled else "info_ytdlp_body"),
                 None if bundled else 'pip install -U "yt-dlp[default]"',
@@ -3682,6 +3789,12 @@ class App(tk.Tk):
         win.update_idletasks()
         self._center(win)
         apply_titlebar_theme(win)
+
+    def _bg_app_check(self):
+        ver, url = latest_app()
+        if url and newer(ver, APP_VERSION):
+            APP_UPDATE.update(url=url, version=ver)
+            self.events.put(("app_update", ver))
 
     def _run_check(self):
         self.chk_btn.config(state="disabled", text=tr("info_checking"))
@@ -3709,19 +3822,22 @@ class App(tk.Tk):
                 ff = (False, "", None)
             if ff[0]:
                 ff = (ff[0], ff[1], latest_ffmpeg())
-        self.events.put(("install_check", yt, ff))
+        app_ver, app_url = latest_app()
+        APP_UPDATE.update(url=app_url, version=app_ver)
+        self.events.put(("install_check", yt, ff, (True, APP_VERSION, app_ver)))
 
-    def _show_install(self, yt, ff):
+    def _show_install(self, yt, ff, app=None):
         if self.info_win is None or not self.info_win.winfo_exists():
             return
-        for key, (ok, ver, latest) in (("yt-dlp", yt), ("ffmpeg", ff)):
+        checks = (("yt-dlp", yt), ("ffmpeg", ff)) + ((("app", app),) if app else ())
+        for key, (ok, ver, latest) in checks:
             w = self.chk[key]
             installed = "✔ " + tr("info_ok") + (f" ({ver})" if ver else "")
             self.upd[key].pack_forget()
             if not ok:
                 w.config(text="✖ " + tr("info_missing"), fg=RED)
             elif newer(latest, ver):
-                if can_update(key):
+                if can_update(key) and (key != "app" or APP_UPDATE.get("url")):
                     self.upd[key].config(state="normal", text=tr("info_update"))
                     self.upd[key].pack(anchor="w", pady=(6, 0))
                 w.config(text="⚠ " + tr("info_ok") + (f" ({ver})" if ver else "")
@@ -3734,18 +3850,25 @@ class App(tk.Tk):
         self._update_trim_availability()
 
     def _run_update(self, key):
+        if key == "app" and (self.running or self.active > 0):
+            self.alert(tr("info_title"), tr("app_busy"))
+            return
         self.upd[key].config(state="disabled", text=tr("info_updating"))
         self.chk_btn.config(state="disabled")
         threading.Thread(target=self._do_update, args=(key,), daemon=True).start()
 
     def _do_update(self, key):
         try:
-            (update_ytdlp if key == "yt-dlp" else update_ffmpeg)()
+            {"yt-dlp": update_ytdlp, "ffmpeg": update_ffmpeg, "app": update_app}[key]()
             self.events.put(("update_done", key, True, ""))
         except Exception as e:
             self.events.put(("update_done", key, False, str(e).strip()[:120]))
 
     def _show_update(self, key, ok, msg):
+        if ok and key == "app":                 # the installer is running: leave so it can replace the files
+            log("app update: installer started, quitting")
+            self._quit()
+            return
         if self.info_win is not None and self.info_win.winfo_exists():
             if ok:
                 self.upd[key].pack_forget()
@@ -4017,12 +4140,11 @@ class App(tk.Tk):
     # ------------------------------------------------------------ thumbnails
     def save_thumb(self, t, title):
         """Saves the original file of a thumbnail (highest quality = untouched download)."""
-        ext = os.path.splitext(urlparse(t["url"]).path)[1].lower()
-        ext = ext if ext in (".jpg", ".jpeg", ".png", ".webp") else ".jpg"
+        ext = ".png"                                  # PNG by default (YouTube serves jpg / webp: converted on save)
         name = sanitize_filename(clean_name(title or "thumbnail")) or "thumbnail"
         path = filedialog.asksaveasfilename(parent=self, initialfile=name + ext, defaultextension=ext,
                                             initialdir=self.outdir.get() if hasattr(self, "outdir") else None,
-                                            filetypes=[(ext[1:].upper(), "*" + ext), ("*", "*.*")])
+                                            filetypes=[("PNG", "*.png"), ("JPEG", "*.jpg"), ("WEBP", "*.webp")])
         if not path:
             return
 
@@ -4034,7 +4156,7 @@ class App(tk.Tk):
                 img = Image.open(io.BytesIO(data))
                 fmt = {".jpg": "JPEG", ".jpeg": "JPEG", ".png": "PNG", ".webp": "WEBP"}.get(want)
                 if fmt and img.format != fmt:       # another extension chosen: convert
-                    img.convert("RGB").save(path, fmt, quality=100)
+                    img.convert("RGB").save(path, fmt, **({"quality": 100} if fmt != "PNG" else {}))
                 else:
                     with open(path, "wb") as f:
                         f.write(data)
@@ -4966,7 +5088,7 @@ class App(tk.Tk):
     def _handle(self, ev):
         kind = ev[0]
         if kind == "external":
-            log(f"link received: {ev[1]}")
+            log(f"link received: {ev[1] or '(show window)'}")
             self._open_external(ev[1])
             return
         if kind == "tray_show":
@@ -4992,8 +5114,11 @@ class App(tk.Tk):
                 self.alert(tr("thumb_title"), ev[1])
         elif kind == "info":
             self._show_info(ev[1], ev[2], ev[3])
+        elif kind == "app_update":
+            log(f"app update available: {ev[1]}")
+            self.info_btn.config(style="primary")        # the Info button lights up
         elif kind == "install_check":
-            self._show_install(ev[1], ev[2])
+            self._show_install(ev[1], ev[2], ev[3] if len(ev) > 3 else None)
         elif kind == "update_done":
             self._show_update(ev[1], ev[2], ev[3])
         elif kind == "bad_url":
@@ -5060,6 +5185,7 @@ class App(tk.Tk):
             self._finish(ev[1])
             ev[1]["row"].set_state("cancelled")
         elif kind == "idle":
+            self.after(1500, trim_memory)
             self.running = False
             self.stop_requested = False
             self._update_stop_btn()
@@ -5070,13 +5196,18 @@ class App(tk.Tk):
 
 if __name__ == "__main__":
     _link = url_from_argv(sys.argv)
-    if _link and send_to_running(_link):                         # already open: just hand the link over
+    if send_to_running(_link or "show"):                         # already open: bring it back (+ hand the link over)
         sys.exit(0)
     _hide_console()
-    try:
-        track_processes()
-        log(f"start: python {sys.version.split()[0]}, yt-dlp {yt_dlp.version.__version__}, "
-            f"ffmpeg {shutil.which('ffmpeg')}, font {FONT}")
-    except Exception:
-        pass
+
+    def _warm_up():                                  # yt-dlp loads while the window appears
+        _load_ytdlp()
+        try:
+            track_processes()
+            log(f"start: python {sys.version.split()[0]}, yt-dlp {yt_dlp.version.__version__}, "
+                f"ffmpeg {shutil.which('ffmpeg')}, font {FONT}")
+            is_supported("https://example.com/")     # builds the extractor list now, not at the first paste
+        except Exception:
+            pass
+    threading.Thread(target=_warm_up, daemon=True).start()
     App(initial_url=_link).mainloop()

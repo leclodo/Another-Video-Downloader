@@ -4,11 +4,7 @@
 
 Une interface graphique simple pour [yt-dlp](https://github.com/yt-dlp/yt-dlp) : colle un lien, choisis la qualité, télécharge. Pour Windows (Python + Tkinter), libre et open source.
 
-<img width="1082" height="430" alt="Fenêtre principale : collez un lien, chargez la vidéo, puis choisissez la qualité et une découpe début/fin optionnelle." src="https://github.com/user-attachments/assets/24ec3dbc-8d6d-4575-9e43-97adc4aae01d" />
-
 ## Fonctions
-
-<img width="1082" height="596" alt="File d’attente avec qualité et découpe par vidéo, réordonnancement par glisser-déposer, progression individuelle et pause/reprise." src="https://github.com/user-attachments/assets/3b80d26f-3174-4a77-9c46-6c8b6a753d74" />
 
 - **Téléchargement** de vidéos YouTube et des autres sites pris en charge par yt-dlp, en qualité au choix ou en **MP3**
 - **File d'attente** : plusieurs téléchargements, pause / reprise, réordonnancement par glisser-déposer, tri par colonne, sauvegarde automatique de la file entre deux lancements
@@ -21,13 +17,11 @@ Une interface graphique simple pour [yt-dlp](https://github.com/yt-dlp/yt-dlp) :
 - **Thèmes** : sombre, clair, sakura, cyberpunk, hacker ; **français / anglais**
 - **Fenêtre de logs** pour le débogage, réduction dans la zone de notification
 
-<img width="508" height="82" alt="Notification de fin de téléchargement avec miniature, titre et boutons pour ouvrir le dossier ou lire le fichier." src="https://github.com/user-attachments/assets/112e407e-4157-4f92-8c97-4562cc8ed5a2" />
-
 ## Installation
 
 ### Option 1 : l'exécutable (le plus simple)
 
-Télécharge `Another Video Downloader.exe` dans l'onglet [**Releases**](../../releases) et lance-le. Rien d'autre à installer.
+Télécharge `Another-Video-Downloader-Installer.exe` dans l'onglet [**Releases**](../../releases) et lance-le (installation sans droits administrateur, raccourci dans le menu démarrer). Mises à jour en un clic depuis la fenêtre **Infos**.
 
 ### Option 2 : depuis les sources
 
@@ -41,7 +35,7 @@ python yt_downloader.py
 
 ### Créer l'exécutable soi-même
 
-Double-clique sur `build_exe.bat` (Windows). Il installe PyInstaller, télécharge ffmpeg si besoin et crée `dist\Another Video Downloader.exe`.
+Installeur : installe [Inno Setup 6](https://jrsoftware.org/isdl.php) puis double-clique sur `build_installer.bat` (crée `dist\Another-Video-Downloader-Installer.exe`). Version portable : `build_portable.bat` (crée `dist\Another-Video-Downloader-Portable.exe`). Dans les deux cas, PyInstaller est installé et ffmpeg téléchargé si besoin.
 
 ## Données
 
@@ -77,7 +71,7 @@ A simple graphical interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp): pas
 
 ### Install
 
-**Executable (easiest):** download `Another Video Downloader.exe` from [**Releases**](../../releases) and run it.
+**Installer (easiest):** download `Another-Video-Downloader-Installer.exe` from [**Releases**](../../releases) and run it (no admin rights needed, Start menu shortcut). One-click updates from the **Info** window.
 
 **From source:** Python 3.10+ and [ffmpeg](https://ffmpeg.org/) (MP3, trimming, video + audio merge).
 
@@ -87,7 +81,7 @@ winget install ffmpeg        # if ffmpeg is not installed yet
 python yt_downloader.py
 ```
 
-**Build the .exe yourself:** double-click `build_exe.bat` (Windows). It installs PyInstaller, downloads ffmpeg if needed and creates `dist\Another Video Downloader.exe`.
+**Build it yourself:** installer: install [Inno Setup 6](https://jrsoftware.org/isdl.php), then double-click `build_installer.bat` (creates `dist\Another-Video-Downloader-Installer.exe`). Portable: `build_portable.bat` (creates `dist\Another-Video-Downloader-Portable.exe`). Both install PyInstaller and download ffmpeg if needed.
 
 ### Data
 

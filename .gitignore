@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+icon.ico
+ffmpeg.exe
+ffprobe.exe
+ffmpeg_dl*
+*.zip
+.vscode/
+.idea/
