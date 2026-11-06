@@ -4,6 +4,7 @@ rem Needs Inno Setup 6 (free): https://jrsoftware.org/isdl.php  or:  winget inst
 rem Put this file, installer.iss, make_icon.py and the fonts folder next to yt_downloader.py, then double-click it.
 rem ffmpeg.exe and ffprobe.exe are used from this folder if present,
 rem otherwise they are downloaded once from gyan.dev (about 90 MB).
+rem deno.exe (JavaScript runtime, required by YouTube for full speed) is downloaded once from GitHub if missing.
 
 python -m pip install -U pyinstaller "yt-dlp[default]" pillow pystray
 if errorlevel 1 (
@@ -37,7 +38,17 @@ if not exist ffprobe.exe (
   exit /b 1
 )
 
-python -m PyInstaller --noconfirm --clean --onedir --windowed --name "Another Video Downloader" --icon icon.ico --add-data "icon.ico;." --add-data "fonts;fonts" --collect-all yt_dlp --collect-all yt_dlp_ejs --hidden-import pystray._win32 --add-binary "ffmpeg.exe;." --add-binary "ffprobe.exe;." yt_downloader.py
+if not exist deno.exe (
+  echo Downloading Deno ^(JavaScript runtime needed by YouTube^), please wait...
+  powershell -NoProfile -Command "$ErrorActionPreference='Stop'; Invoke-WebRequest 'https://github.com/denoland/deno/releases/latest/download/deno-x86_64-pc-windows-msvc.zip' -OutFile deno_dl.zip; Expand-Archive deno_dl.zip -DestinationPath deno_dl -Force; Get-ChildItem deno_dl -Recurse -Include deno.exe | Copy-Item -Destination .; Remove-Item deno_dl.zip; Remove-Item deno_dl -Recurse -Force"
+)
+if not exist deno.exe (
+  echo deno.exe not found. Download it from https://github.com/denoland/deno/releases and put it next to this file.
+  pause
+  exit /b 1
+)
+
+python -m PyInstaller --noconfirm --clean --onedir --windowed --name "Another Video Downloader" --icon icon.ico --add-data "icon.ico;." --add-data "fonts;fonts" --collect-all yt_dlp --collect-all yt_dlp_ejs --hidden-import pystray._win32 --add-binary "ffmpeg.exe;." --add-binary "ffprobe.exe;." --add-binary "deno.exe;." yt_downloader.py
 if errorlevel 1 (
   echo PyInstaller failed.
   pause

@@ -449,12 +449,56 @@ T = {
         "notif_test": "Tester les notifications",
         "notif_sound": "Son de fin de téléchargement", "notif_toast": "Bulle de notification",
         "notif_on": "Activé", "notif_off": "Désactivé", "canceled": "Annulé",
-        "tab_general": "Général", "tab_dl": "Téléchargement", "tab_notif": "Notifications",
+        "tab_general": "Général", "tab_dl": "Téléchargement", "tab_notif": "Notifications", "tab_adv": "Avancé",
+        "set_codec": "Codec vidéo", "codec_h264": "H.264 (Premiere)", "codec_best": "Max", "codec_vp9": "VP9", "codec_av1": "AV1",
+        "codec_hint": "H.264 : compatible Premiere et la plupart des logiciels de montage (ré-encodé automatiquement si YouTube n'a que du VP9/AV1/Opus). "
+                      "Max : le meilleur flux disponible, sans conversion. VP9 / AV1 : préfère ce codec quand il existe.",
+        "dup_queue_title": "Déjà dans la file", "dup_queue_msg": "« {name} » est déjà dans la file.\n\nL'ajouter quand même ?",
+        "dup_hist_msg": "« {name} » a déjà été téléchargée le {date}.\n\nLa télécharger à nouveau ?",
+        "dup_tag_queue": "déjà dans la file", "dup_tag_hist": "déjà téléchargée",
+        "dup_pl_msg": "{n} vidéo(s) de la playlist sont déjà dans la file ou déjà téléchargées.\n\nLes ignorer ?",
+        "hist_search": "Rechercher", "hist_sort_new": "Récents", "hist_sort_old": "Anciens", "hist_sort_name": "A–Z",
+        "hist_none": "Aucun résultat",
+        "set_retry": "Relance automatique", "retry_off": "Non",
+        "retry_hint": "Nombre d'essais en cas d'erreur réseau.",
+        "set_cookies": "Cookies du navigateur", "cookies_none": "Aucun",
+        "cookies_why": "Certaines vidéos (privées, +18, réservées aux membres) ne s'ouvrent que si tu es connecté. "
+                       "Connecte-toi au site de la vidéo dans Firefox et choisis-le ici : l'appli utilise ta session, "
+                       "uniquement pour ces vidéos. Inutile pour les vidéos publiques.",
+        "cookies_import_hint": "Chrome, Edge, Brave : exporte tes cookies avec une extension (« Get cookies.txt LOCALLY »), "
+                               "puis importe le fichier. Tes cookies restent sur ton PC : ils ne sont ni partagés, "
+                               "ni envoyés à autre chose qu'au site de la vidéo.",
+        "ck_sync_hint": "Cette vidéo demande d'être connecté (privée, +18, membres…).\n"
+                        "Ajoute tes cookies dans Paramètres › Avancé.",
+        "ck_import": "Importer un cookies.txt", "ck_remove": "Retirer",
+        "ck_file_ok": "✔ Fichier importé ({n} cookies)", "ck_file_bad": "✖ Fichier invalide (format cookies.txt attendu)",
+        "priv_title": "Confidentialité",
+        "priv_body": "Aucune donnée n'est collectée, prélevée, partagée ni vendue. Tout (réglages, file d'attente, historique) reste sur ton PC. "
+                     "L'application ne contacte que les sites des vidéos, et GitHub / PyPI pour vérifier les mises à jour.",
+        "retry": "Nouvelle tentative…",
+        "ck_test": "Vérifier les cookies", "ck_js_hint": "Avec les cookies, YouTube (et certains sites) demande Node.js ou Deno installé sur le PC (winget install DenoLand.Deno), puis redémarre l'appli. Sinon, choisis « Aucun » pour les cookies.", "ck_testing": "Test en cours…",
+        "ck_ok": "{n} cookies trouvés", "ck_more": "Cliquez ici pour plus d'infos",
+        "ck_dpapi": "Ce navigateur bloque la lecture de ses cookies (chiffrement). Utilise Firefox.",
+        "ck_noyt": "Aucun cookie trouvé : connecte-toi à un site dans ce navigateur",
+        "ck_fail": "Échec : {e}",
+        "hist_btn": "Historique", "hist_title": "Historique des téléchargements",
+        "hist_empty": "Aucun téléchargement pour l'instant.", "hist_open": "Ouvrir", "hist_folder": "Dossier",
+        "hist_clear": "Vider l'historique", "hist_confirm": "Vider tout l'historique ?\n\nLes fichiers téléchargés ne sont pas supprimés.",
+        "hist_missing": "fichier introuvable",
+        "q_opts": "Options de la file", "q_sched": "Démarrer la file à", "q_after": "Quand la file est terminée",
+        "q_after_none": "Ne rien faire", "q_after_sleep": "Mettre en veille", "q_after_shutdown": "Éteindre le PC",
+        "q_save": "Enregistrer", "q_cancel": "Annuler", "q_sched_at": "Démarrage à {t}",
+        "q_label_sleep": "Veille à la fin", "q_label_shutdown": "Extinction à la fin",
+        "q_count_sleep": "Mise en veille du PC dans {n} s…", "q_count_shutdown": "Extinction du PC dans {n} s…",
+        "q_count_title": "File terminée",
+        "pl_pick_title": "Choisir les vidéos", "pl_ok": "Valider ({n})", "pick_btn": "Choisir les vidéos de la playlist", "pick_btn_n": "Vidéos choisies : {n}/{t}", "pl_pick_msg": "Playlist : {title}",
+        "pl_all": "Tout cocher", "pl_none": "Tout décocher", "pl_add": "Ajouter ({n})", "pl_cancel": "Annuler",
         "dup_title": "Déjà téléchargé", "dup_msg": "« {name} » existe déjà dans ce dossier.\n\nLe télécharger à nouveau ?",
         "rename_title": "Renommer le fichier",
         "rename_prompt": "Nom du fichier (sans extension) :",
         "tip_rename": "Renommer le fichier",
         "tip_folder": "Dossier d'enregistrement :",
+        "tip_link": "Copier le lien de la vidéo\n(Ctrl + clic : l'ouvrir dans le navigateur)",
         "tip_play": "Télécharger cette vidéo seulement",
         "tip_delete": "Retirer de la file",
         "tip_stop": "Mettre ce téléchargement en pause",
@@ -486,6 +530,11 @@ T = {
         "app_busy": "Des téléchargements sont en cours : attends qu'ils se terminent avant de mettre à jour.",
         "app_manual": "Mise à jour automatique disponible seulement avec la version installée. Télécharge la nouvelle version sur GitHub.",
         "app_github": "Page des versions (GitHub)",
+        "upd_title": "Mise à jour disponible",
+        "upd_msg": "La version {v} est disponible (tu as la {cur}). Veux-tu mettre à jour maintenant ?",
+        "upd_notes": "Notes de mise à jour (GitHub)",
+        "upd_now": "Mettre à jour", "upd_ignore": "Ignorer",
+        "upd_ignore_tip": "Tu peux faire la mise à jour manuellement dans le menu Infos.",
         "info_updating": "Mise à jour… (patiente)",
         "info_updated_restart": "mis à jour — relance l'appli pour l'appliquer",
         "info_updated": "mis à jour",
@@ -610,12 +659,56 @@ T = {
         "notif_test": "Test notifications",
         "notif_sound": "Download finished sound", "notif_toast": "Popup notification",
         "notif_on": "On", "notif_off": "Off", "canceled": "Canceled",
-        "tab_general": "General", "tab_dl": "Download", "tab_notif": "Notifications",
+        "tab_general": "General", "tab_dl": "Download", "tab_notif": "Notifications", "tab_adv": "Advanced",
+        "set_codec": "Video codec", "codec_h264": "H.264 (Premiere)", "codec_best": "Max", "codec_vp9": "VP9", "codec_av1": "AV1",
+        "codec_hint": "H.264: works in Premiere and most editors (re-encoded automatically if YouTube only has VP9/AV1/Opus). "
+                      "Max: the best stream available, no conversion. VP9 / AV1: prefers that codec when it exists.",
+        "dup_queue_title": "Already in the queue", "dup_queue_msg": "\"{name}\" is already in the queue.\n\nAdd it anyway?",
+        "dup_hist_msg": "\"{name}\" was already downloaded on {date}.\n\nDownload it again?",
+        "dup_tag_queue": "already in the queue", "dup_tag_hist": "already downloaded",
+        "dup_pl_msg": "{n} video(s) of the playlist are already in the queue or already downloaded.\n\nSkip them?",
+        "hist_search": "Search", "hist_sort_new": "Newest", "hist_sort_old": "Oldest", "hist_sort_name": "A–Z",
+        "hist_none": "No result",
+        "set_retry": "Automatic retry", "retry_off": "Off",
+        "retry_hint": "Number of attempts after a network error.",
+        "set_cookies": "Browser cookies", "cookies_none": "None",
+        "cookies_why": "Some videos (private, 18+, members-only) only open when you are signed in. "
+                       "Sign in to the video's site in Firefox and pick it here: the app uses your session, "
+                       "only for those videos. Not needed for public videos.",
+        "cookies_import_hint": "Chrome, Edge, Brave: export your cookies with an extension (“Get cookies.txt LOCALLY”), "
+                               "then import the file. Your cookies stay on your PC: they are not shared, "
+                               "and only sent to the video's own site.",
+        "ck_sync_hint": "This video needs a sign-in (private, 18+, members…).\n"
+                        "Add your cookies in Settings › Advanced.",
+        "ck_import": "Import a cookies.txt", "ck_remove": "Remove",
+        "ck_file_ok": "✔ File imported ({n} cookies)", "ck_file_bad": "✖ Invalid file (cookies.txt format expected)",
+        "priv_title": "Privacy",
+        "priv_body": "No data is collected, harvested, shared or sold. Everything (settings, queue, history) stays on your PC. "
+                     "The app only contacts the video sites, and GitHub / PyPI to check for updates.",
+        "retry": "Retrying…",
+        "ck_test": "Check cookies", "ck_js_hint": "With cookies, YouTube (and some sites) needs Node.js or Deno installed on the PC (winget install DenoLand.Deno), then restart the app. Otherwise set cookies to None.", "ck_testing": "Testing…",
+        "ck_ok": "{n} cookies found", "ck_more": "Click here for more info",
+        "ck_dpapi": "This browser blocks reading its cookies (encryption). Use Firefox.",
+        "ck_noyt": "No cookie found: sign in to a site in that browser",
+        "ck_fail": "Failed: {e}",
+        "hist_btn": "History", "hist_title": "Download history",
+        "hist_empty": "No downloads yet.", "hist_open": "Open", "hist_folder": "Folder",
+        "hist_clear": "Clear history", "hist_confirm": "Clear the whole history?\n\nDownloaded files are not deleted.",
+        "hist_missing": "file not found",
+        "q_opts": "Queue options", "q_sched": "Start the queue at", "q_after": "When the queue is finished",
+        "q_after_none": "Do nothing", "q_after_sleep": "Sleep", "q_after_shutdown": "Shut down the PC",
+        "q_save": "Save", "q_cancel": "Cancel", "q_sched_at": "Starts at {t}",
+        "q_label_sleep": "Sleep when done", "q_label_shutdown": "Shut down when done",
+        "q_count_sleep": "The PC goes to sleep in {n} s…", "q_count_shutdown": "The PC shuts down in {n} s…",
+        "q_count_title": "Queue finished",
+        "pl_pick_title": "Choose videos", "pl_ok": "Confirm ({n})", "pick_btn": "Choose playlist videos", "pick_btn_n": "Selected videos: {n}/{t}", "pl_pick_msg": "Playlist: {title}",
+        "pl_all": "Select all", "pl_none": "Select none", "pl_add": "Add ({n})", "pl_cancel": "Cancel",
         "dup_title": "Already downloaded", "dup_msg": "\"{name}\" already exists in this folder.\n\nDownload it again?",
         "rename_title": "Rename file",
         "rename_prompt": "File name (without extension):",
         "tip_rename": "Rename file",
         "tip_folder": "Save folder:",
+        "tip_link": "Copy the video link\n(Ctrl + click: open it in the browser)",
         "tip_play": "Download this video only",
         "tip_delete": "Remove from queue",
         "tip_stop": "Pause this download",
@@ -647,6 +740,11 @@ T = {
         "app_busy": "Downloads are running: wait for them to finish before updating.",
         "app_manual": "Automatic update is only available with the installed version. Download the new version from GitHub.",
         "app_github": "Releases page (GitHub)",
+        "upd_title": "Update available",
+        "upd_msg": "Version {v} is available (you have {cur}). Update now?",
+        "upd_notes": "Release notes (GitHub)",
+        "upd_now": "Update now", "upd_ignore": "Ignore",
+        "upd_ignore_tip": "You can update manually from the Info menu.",
         "info_updating": "Updating… (please wait)",
         "info_updated_restart": "updated — restart the app to apply",
         "info_updated": "updated",
@@ -695,6 +793,10 @@ class Cancelled(Exception):
     """Raised from yt-dlp hooks to abort a download."""
 
 
+class SlowRestart(Exception):
+    """Raised from the progress hook when YouTube throttles the connection: reconnect and resume."""
+
+
 class NotAVideo(Exception):
     pass
 
@@ -720,6 +822,9 @@ DEFAULT_TPL = NAME_TPL
 SPEED_LIMIT = 0.0                    # speed limit really applied, MB/s (0 = unlimited)
 SPEED_VALUE = 0.0                    # limit typed in the settings (kept even when "unlimited" is chosen)
 SPEED_UNLIM = False                  # "unlimited" chosen: the typed limit is kept but not applied
+VIDEO_CODEC = "h264"                 # h264 (editing-friendly) / best / vp9 / av1
+AUTO_RETRY = 2                       # attempts after a network error
+COOKIES_BROWSER = ""                 # browser whose cookies yt-dlp uses ("" = none)
 COMPAT_EDIT = True                   # prefer H.264 + AAC (opens in Premiere & co)
 LIVE_FROM_START = False              # live streams: record from the very start (yt-dlp --live-from-start)
 NOTIFY_SOUND = True                  # sound when a download is finished
@@ -730,9 +835,27 @@ NOTIFY_TOAST = True                  # popup (bottom right) when a download is f
 TRAY = False                         # the window's cross hides the app in the tray instead of quitting
 
 
+RECENT_DL = []          # (MB/s, MB) of the last downloaded files, for the diagnostic log
+_LAST_LIMIT = [None]
+
+
 def apply_speed():
     global SPEED_LIMIT
     SPEED_LIMIT = 0.0 if (SPEED_UNLIM or SPEED_VALUE <= 0) else SPEED_VALUE
+    if _LAST_LIMIT[0] is not None and _LAST_LIMIT[0] != SPEED_LIMIT:
+        old, new = _LAST_LIMIT[0], SPEED_LIMIT
+        log(f"speed limit changed: {'unlimited' if old <= 0 else f'{old:g} MB/s'} -> "
+            f"{'unlimited' if new <= 0 else f'{new:g} MB/s'} (typed value={SPEED_VALUE:g}, unlimited button={SPEED_UNLIM})")
+    _LAST_LIMIT[0] = SPEED_LIMIT
+
+
+def recent_avg(n=5):
+    """Average speed of the last n files (MB/s), '' when nothing yet."""
+    last = RECENT_DL[-n:]
+    if not last:
+        return ""
+    return f"average of last {len(last)} download(s): {sum(v for v, _ in last) / len(last):.2f} MB/s " \
+           f"(" + ", ".join(f"{v:.1f}" for v, _ in last) + ")"
 
 
 def fmt_date(d, sep=None):
@@ -899,25 +1022,198 @@ def fit_text(text, font, px):
     """Truncate `text` with an ellipsis so it is at most `px` pixels wide."""
     if font.measure(text) <= px:
         return text
-    while text and font.measure(text + "…") > px:
-        text = text[:-1]
-    return text + "…"
+    lo, hi = 0, len(text)                      # largest n such that text[:n] + "…" still fits (binary search)
+    while lo < hi:
+        mid = (lo + hi + 1) // 2
+        if font.measure(text[:mid] + "…") <= px:
+            lo = mid
+        else:
+            hi = mid - 1
+    return text[:lo] + "…"
 
 
 def clean(msg):
     return ANSI.sub("", msg).strip()
 
 
+# Windows: Chromium browsers (Chrome, Edge, Brave, Opera, Vivaldi) lock their cookies, only Firefox can be read
+COOKIE_BROWSERS = (("firefox", "Firefox"),) if sys.platform.startswith("win") else (
+    ("chrome", "Chrome"), ("edge", "Edge"), ("firefox", "Firefox"), ("brave", "Brave"), ("opera", "Opera"),
+    ("vivaldi", "Vivaldi"))
+
+
+def js_runtime_opts():
+    """With cookies YouTube needs a JavaScript runtime (Deno / Node.js ...) to unlock the formats.
+    yt-dlp only looks for Deno by default, so every runtime found on the PC is handed to it."""
+    found = {}
+    for name in ("deno", "node", "bun"):
+        path = shutil.which(name)
+        if path:
+            found[name] = {"path": path}
+    return {"js_runtimes": found} if found else {}
+
+
+_COOKIES = {}                       # browser -> cookies read once (reading + decrypting them takes seconds)
+_COOKIES_LOCK = threading.Lock()
+
+
+def cached_cookies(browser, force=False):
+    """The browser's cookies, read once and kept: loading a video no longer re-reads the whole cookie store."""
+    with _COOKIES_LOCK:
+        if force or browser not in _COOKIES:
+            from yt_dlp.cookies import extract_cookies_from_browser
+            _COOKIES[browser] = list(extract_cookies_from_browser(browser))
+        return _COOKIES[browser]
+
+
+def cookies_file_path():
+    """Copy of the cookies.txt the user imported (kept in the app's own folder, never sent anywhere)."""
+    return os.path.join(app_data_dir(), "cookies.txt")
+
+
+def count_cookies_file(path):
+    """Number of cookies in a Netscape-format cookies.txt (0 = not a valid file)."""
+    n = 0
+    try:
+        with open(path, encoding="utf-8", errors="replace") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("#HttpOnly_"):
+                    line = line[len("#HttpOnly_"):]
+                if line and not line.startswith("#") and len(line.split("\t")) >= 7:
+                    n += 1
+    except OSError:
+        return 0
+    return n
+
+
+def cookies_available():
+    return bool(COOKIES_BROWSER) or os.path.exists(cookies_file_path())
+
+
+def apply_cookies(ydl):
+    if os.path.exists(cookies_file_path()):            # an imported file comes first
+        try:
+            ydl.cookiejar.load(cookies_file_path(), ignore_discard=True, ignore_expires=True)
+        except Exception as ce:
+            raise RuntimeError(tr("ck_sync_hint")) from ce
+        return
+    if COOKIES_BROWSER:
+        try:
+            cookies = cached_cookies(COOKIES_BROWSER, force=True)     # re-read: you may have signed in since
+        except Exception as ce:                  # browser open / not installed / not readable
+            log("cookies unreadable: " + clean(str(ce)), "warning")
+            raise RuntimeError(tr("ck_sync_hint")) from ce
+        for c in cookies:
+            ydl.cookiejar.set_cookie(c)
+
+
+LOGIN_WORDS = ("sign in", "log in", "login", "private", "members", "age-restricted", "confirm your age",
+               "not a bot", "cookies", "join this channel", "premium", "requires payment")
+
+
+def needs_login(msg):
+    """True when the error means the video needs the signed-in session (so cookies are worth their cost)."""
+    m = str(msg).lower()
+    return any(w in m for w in LOGIN_WORDS)
+
+
+LOGIN_AVAIL = ("needs_auth", "subscriber_only", "premium_only", "private")
+
+
+def cookie_hint(msg):
+    """Adds the explanation of what to do when a video needs a signed-in session or cookies are missing."""
+    if tr("ck_sync_hint") in msg:
+        return msg
+    if needs_login(msg):
+        log("login needed: " + msg, "info")
+        return tr("ck_sync_hint")                      # short and clear instead of the raw yt-dlp text
+    if COOKIES_BROWSER and "format is not available" in msg:
+        return msg + "\n\n" + tr("ck_js_hint")
+    return msg
+
+
 LOG = []                      # (time, level, text) - shown by the Logs window
 LOG_LOCK = threading.Lock()
 
 
+LOG_FILE_ON = [False]         # the log file is used once the session has started (see init_log_file)
+LOG_KEEP = 3000
+
+
+def log_file_path():
+    return os.path.join(app_data_dir(), "logs.txt")
+
+
 def log(msg, level="info"):
-    """Adds a line to the in-app log (thread-safe, capped)."""
+    """Adds a line to the in-app log (thread-safe, capped) and to the log file (kept between sessions)."""
     with LOG_LOCK:
+        out = []
         for line in str(msg).splitlines() or [""]:
-            LOG.append((time.strftime("%H:%M:%S"), level, line[:800]))
-        del LOG[:-3000]
+            line = line[:800]
+            LOG.append((time.strftime("%H:%M:%S"), level, line))
+            out.append(f"{time.strftime('%Y-%m-%d %H:%M:%S')}\t{level}\t{line}\n")
+        del LOG[:-LOG_KEEP]
+        if LOG_FILE_ON[0]:
+            try:
+                with open(log_file_path(), "a", encoding="utf-8") as f:
+                    f.writelines(out)
+            except OSError:
+                pass
+
+
+def init_log_file():
+    """Loads the previous sessions' logs into the Logs window, notes whether the last session ended cleanly
+    (no 'closed' line = crash / kill), brings back what Python's crash handler wrote, and starts the session."""
+    path = log_file_path()
+    lines, today = [], time.strftime("%Y-%m-%d")
+    try:
+        os.makedirs(app_data_dir(), exist_ok=True)
+        if os.path.exists(path):
+            with open(path, encoding="utf-8", errors="replace") as f:
+                lines = f.readlines()
+            if len(lines) > 20000:                         # the file stays small: last 20000 lines
+                lines = lines[-20000:]
+                with open(path, "w", encoding="utf-8") as f:
+                    f.writelines(lines)
+    except OSError:
+        lines = []
+    with LOG_LOCK:
+        for ln in lines[-LOG_KEEP:]:
+            parts = ln.rstrip("\n").split("\t", 2)
+            if len(parts) == 3:
+                day, _, hms = parts[0].partition(" ")
+                ts = hms if day == today else f"{day[8:10]}/{day[5:7]} {hms}"
+                LOG.append((ts, parts[1], parts[2]))
+    LOG_FILE_ON[0] = True
+    last = next((ln for ln in reversed(lines) if "===== app " in ln), "")      # last open / close marker
+    crashed = bool(last) and "===== app closed" not in last
+    if crashed:
+        last = next((ln for ln in reversed(lines) if ln.strip()), "")
+    log(f"===== app opened (v{APP_VERSION}, pid {os.getpid()}) =====")
+    if crashed:
+        log("previous session did not end cleanly (crash, kill or power cut): last line was -> "
+            + last.rstrip("\n").replace("\t", " ")[:300], "warning")
+    crash = os.path.join(app_data_dir(), "crash.txt")      # written by faulthandler when Python itself dies
+    try:
+        if os.path.exists(crash) and os.path.getsize(crash) > 0:
+            with open(crash, encoding="utf-8", errors="replace") as f:
+                log("crash report of the previous session:\n" + f.read(), "error")
+        import faulthandler
+        _fh = open(crash, "w", encoding="utf-8")
+        faulthandler.enable(_fh, all_threads=True)
+        globals()["_FAULT_FILE"] = _fh
+    except Exception:
+        pass
+
+    def _hook(et, ev, tb):
+        log("uncaught error: " + "".join(traceback.format_exception(et, ev, tb)), "error")
+    sys.excepthook = _hook
+    try:
+        threading.excepthook = lambda a: log("uncaught error in thread " + str(getattr(a.thread, "name", "?")) + ": "
+                                             + "".join(traceback.format_exception(a.exc_type, a.exc_value, a.exc_traceback)), "error")
+    except Exception:
+        pass
 
 
 class QuietLogger:
@@ -927,10 +1223,12 @@ class QuietLogger:
     def __init__(self, on_line=None):
         self.on_line = on_line
 
+    _ansi = re.compile(r"\x1b\[[0-9;]*m")
+
     def debug(self, msg):
         if self.on_line:
             self.on_line(msg)
-        if not self._progress.match(msg.strip()):
+        if not self._progress.match(self._ansi.sub("", msg).strip()):   # colour codes hid the progress lines
             log(msg, "debug")
 
     def info(self, msg):
@@ -980,6 +1278,57 @@ def stop_processes(tid, hard=False):
                 pass
 
 
+TEMP_DIRNAME = ".avd-temp"
+
+
+def video_key(url):
+    """Short id of a video, used in the name of its work folder (two downloads never share one)."""
+    m = re.search(r"(?:[?&]v=|youtu\.be/|/shorts/|/live/|/embed/)([\w-]{6,})", url or "")
+    if m:
+        return m.group(1)
+    import hashlib
+    return hashlib.md5(norm_url(url or "").encode("utf-8", "ignore")).hexdigest()[:10]
+
+
+def tmp_dir(outdir, key=None):
+    """Hidden sub-folder where yt-dlp keeps its work files (.part, fragments, .temp. conversions) until a
+    download is finished: the chosen folder stays clean meanwhile. One folder per video."""
+    return os.path.join(outdir, TEMP_DIRNAME + ("-" + key if key else ""))
+
+
+def make_tmp_dir(outdir, key=None):
+    path = tmp_dir(outdir, key)
+    try:
+        os.makedirs(path, exist_ok=True)
+        if sys.platform.startswith("win"):
+            import ctypes
+            ctypes.windll.kernel32.SetFileAttributesW(path, 0x2)      # hidden
+    except Exception:
+        pass
+    return path
+
+
+def all_tmp_dirs(outdir):
+    try:
+        return [os.path.join(outdir, n) for n in os.listdir(outdir)
+                if n.startswith(TEMP_DIRNAME) and os.path.isdir(os.path.join(outdir, n))]
+    except OSError:
+        return []
+
+
+def drop_tmp_dir(outdir, key=None):
+    """Removes the work folder(s) once empty (a paused download keeps its files there)."""
+    for d in ([tmp_dir(outdir, key)] if key else all_tmp_dirs(outdir)):
+        try:
+            os.rmdir(d)
+        except OSError:
+            pass
+
+
+def work_dirs(outdir):
+    return [d for d in [outdir] + all_tmp_dirs(outdir) if d and os.path.isdir(d)]
+
+
 def watch_conversion(app, it, outdir, name, key, info, stop):
     """yt-dlp reports nothing while ffmpeg converts: follow the growth of the temporary output file."""
     stop.clear()
@@ -1002,7 +1351,7 @@ def watch_conversion(app, it, outdir, name, key, info, stop):
     def run():
         while not stop.is_set() and it["status"] == "running":
             try:
-                cands = [os.path.join(outdir, f) for f in os.listdir(outdir) if ".temp." in f]
+                cands = [os.path.join(d, f) for d in work_dirs(outdir) for f in os.listdir(d) if ".temp." in f]
                 cands = [c for c in cands if os.path.getmtime(c) >= t0]
             except (OSError, ValueError):
                 cands = []
@@ -1229,11 +1578,65 @@ def save_settings(**kw):
 
 QUEUE_KEYS = ("url", "title", "channel", "view_count", "duration", "upload_date", "date_raw", "name", "custom",
               "trimmed", "start", "end", "quality", "qualities", "outdir", "is_live", "live_from_start", "no_trim",
-              "pl_color", "playlist", "sizes", "started", "final_base", "filepath", "added")
+              "pl_color", "playlist", "thumb_url", "sizes", "started", "final_base", "filepath", "added")
 
 
 def queue_path():
     return os.path.join(app_data_dir(), "queue.json")
+
+
+def history_path():
+    return os.path.join(app_data_dir(), "history.json")
+
+
+def load_history():
+    try:
+        with open(history_path(), encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, list) else []
+    except Exception:
+        return []
+
+
+def save_history(data):
+    try:
+        path = history_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data[:300], f, ensure_ascii=False)
+    except Exception:
+        pass
+
+
+def norm_url(u):
+    """Same video = same key (YouTube: the video id, whatever the link looks like)."""
+    u = (u or "").strip()
+    try:
+        from urllib.parse import urlparse, parse_qs
+        p_ = urlparse(u)
+        host = p_.netloc.lower()
+        if "youtu.be" in host:
+            return "yt:" + p_.path.strip("/")
+        if "youtube" in host:
+            v = parse_qs(p_.query).get("v")
+            if v:
+                return "yt:" + v[0]
+            if p_.path.startswith(("/shorts/", "/live/", "/embed/")):
+                return "yt:" + p_.path.split("/")[2]
+    except Exception:
+        pass
+    return u.split("#")[0].rstrip("/")
+
+
+def add_history(item):
+    """Newest first, 300 entries at most (history.json next to the settings)."""
+    path = item.get("filepath")
+    if not path:
+        return
+    data = [e for e in load_history() if e.get("path") != path]
+    data.insert(0, {"title": item.get("name") or os.path.basename(path), "path": path, "url": item.get("url") or "",
+                    "date": time.strftime("%Y-%m-%d %H:%M"), "quality": item.get("quality") or ""})
+    save_history(data)
 
 
 def item_to_json(it):
@@ -1318,7 +1721,7 @@ def latest_ffmpeg():
 FFMPEG_ZIP = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.3.0"
 APP_REPO = "leclodo/Another-Video-Downloader"
 APP_RELEASES_URL = f"https://github.com/{APP_REPO}/releases"
 
@@ -1496,6 +1899,54 @@ def fetch_image(url):
         return None
 
 
+def small_thumb_url(e):
+    """Smallest thumbnail of a playlist entry that is still sharp enough for a 64-96 px preview."""
+    ts = [t for t in (e.get("thumbnails") or []) if (t.get("url") or "").startswith("http")]
+    ts = [t for t in ts if ".mhtml" not in t["url"] and not t.get("fragments")]
+    if ts:
+        big = sorted((t for t in ts if (t.get("width") or 0) >= 96), key=lambda t: t["width"])
+        return (big[0] if big else ts[-1])["url"]
+    return e.get("thumbnail") or ""
+
+
+def fetch_small(url):
+    """A tiny preview (max 96x54) of a thumbnail, or None."""
+    if not url:
+        return None
+    try:
+        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req, timeout=10) as r:
+            img = Image.open(io.BytesIO(r.read()))
+            img.draft("RGB", (192, 108))
+            img = img.convert("RGB")
+            img.thumbnail((96, 54), Image.Resampling.BILINEAR)
+            return img
+    except Exception:
+        return None
+
+
+def load_small_thumbs(jobs, deliver, workers=4):
+    """jobs = [(key, url)]; deliver(key, img) is called from worker threads for each success."""
+    q = queue.Queue()
+    for j in jobs:
+        q.put(j)
+
+    def work():
+        while True:
+            try:
+                key, url = q.get_nowait()
+            except queue.Empty:
+                return
+            img = fetch_small(url)
+            if img is not None:
+                try:
+                    deliver(key, img)
+                except Exception:
+                    return
+    for _ in range(min(workers, len(jobs))):
+        threading.Thread(target=work, daemon=True).start()
+
+
 THUMB_CACHE = {}      # url -> original bytes
 
 
@@ -1588,6 +2039,9 @@ class RoundButton(tk.Canvas):
             "primary": (ACCENT, ACCENT_HI, "#ffffff"),
             "secondary": (BTN2, BTN2_HI, FG),
             "danger": (DANGER_BG, DANGER_HI, RED),
+            "history": (mix_color(BTN2, GREEN, 0.22), mix_color(BTN2_HI, GREEN, 0.32), GREEN),
+            "ck_ok": (mix_color(BTN2, GREEN, 0.22), mix_color(BTN2_HI, GREEN, 0.32), GREEN),
+            "ck_bad": (mix_color(BTN2, RED, 0.22), mix_color(BTN2_HI, RED, 0.32), RED),
         }
 
     def __init__(self, parent, text, command, small=False, style="primary", state="normal"):
@@ -1828,7 +2282,8 @@ def send_to_running(url):
     try:
         with socket.create_connection(("127.0.0.1", PORT), timeout=0.6) as c:
             c.sendall(("JAYTDL " + url).encode("utf-8"))
-        return True
+            c.settimeout(3)
+            return c.recv(8) == b"OK"       # only a window that really answers counts (not a frozen process)
     except OSError:
         return False
 
@@ -1852,14 +2307,19 @@ def start_listener(events):
                 conn.settimeout(2)
                 data = conn.recv(4096)
                 u = data[7:].decode("utf-8", "ignore").strip() if data.startswith(b"JAYTDL ") else None
+                ack = threading.Event()
+                if u == "show":                  # plain relaunch: just bring the window back
+                    events.put(("external", "", ack))
+                elif u and len(u) < 4000 and u.startswith(("http://", "https://")):
+                    events.put(("external", u, ack))
+                else:
+                    ack = None
+                if ack is not None and ack.wait(2.5):    # the window itself handled it
+                    conn.sendall(b"OK")
             except (OSError, ValueError):
-                u = None
+                pass
             finally:
                 conn.close()
-            if u == "show":                      # plain relaunch: just bring the window back
-                events.put(("external", ""))
-            elif u and len(u) < 4000 and u.startswith(("http://", "https://")):
-                events.put(("external", u))
     threading.Thread(target=loop, daemon=True).start()
 
 
@@ -1924,6 +2384,14 @@ class QueueRow(tk.Frame):
         """Name, quality and folder are frozen once the download has started (even when paused)."""
         return item["status"] in QueueRow.EDITABLE and not item.get("started")
 
+    def set_thumb(self, img):
+        """A playlist line gets its real thumbnail once downloaded."""
+        try:
+            self.photo = ImageTk.PhotoImage(img.resize((64, 36), Image.Resampling.LANCZOS))
+            self.thumb_cell.config(image=self.photo)
+        except tk.TclError:
+            pass
+
     def __init__(self, master, item, app):
         super().__init__(master, bg=CARD)
         if "added" not in item:
@@ -1946,15 +2414,17 @@ class QueueRow(tk.Frame):
             self.photo = ImageTk.PhotoImage(item["thumb"].resize((64, 36), Image.Resampling.LANCZOS))
         elif item.get("pl_color"):   # playlist line: icon in the playlist's colour instead of a thumbnail
             self.photo = ImageTk.PhotoImage(playlist_icon(64, 36, item["pl_color"]))
+        if item.get("pl_color"):     # coloured line at the start: links the videos of one playlist together
+            tk.Frame(self, bg=item["pl_color"], width=4).place(x=0, y=0, relheight=1)
         cell0 = tk.Frame(self, bg=CARD)
-        cell0.grid(row=0, column=0, padx=4, pady=8)
+        cell0.grid(row=0, column=0, padx=(10, 4), pady=8)
         # drag handle: grab it and move the line to change the download order
         self.handle = lbl(cell0, "≡", 15, MUTED, cursor="fleur")
         self.handle.pack(side="left", padx=(0, 6))
         self.handle.bind("<ButtonPress-1>", lambda e: self.handle.config(fg=ACCENT_HI))
         self.handle.bind("<B1-Motion>", lambda e: app.drag_move(item, e.y_root))
         self.handle.bind("<ButtonRelease-1>", lambda e: self.handle.config(fg=MUTED))
-        thumb_cell = tk.Label(cell0, image=self.photo, bg=CARD2, bd=0)
+        thumb_cell = self.thumb_cell = tk.Label(cell0, image=self.photo, bg=CARD2, bd=0)
         thumb_cell.pack(side="left")
         if item.get("playlist"):
             Tooltip(thumb_cell, lambda: item["playlist"])
@@ -1968,6 +2438,9 @@ class QueueRow(tk.Frame):
         self.btn_edit.pack(side="left", padx=(6, 0))
         self.btn_dir = icon_button(tcell, "📁", lambda: app.choose_item_dir(item), size=10)
         self.btn_dir.pack(side="left")
+        self.btn_link = icon_button(tcell, "🔗", self._copy_link, size=10)    # copy the link; Ctrl+click opens it
+        self.btn_link.pack(side="left")
+        self.btn_link.bind("<Control-Button-1>", self._open_link)
 
         def cell(col, color=MUTED):
             w = lbl(self, "", 11, color)
@@ -2014,18 +2487,36 @@ class QueueRow(tk.Frame):
         self.name_lbl.bind("<Double-Button-1>", lambda e: app.rename_item(item))  # double click = rename
         Tooltip(self.btn_edit, lambda: tr("tip_rename"))
         Tooltip(self.btn_dir, lambda: f"{tr('tip_folder')}\n{item['outdir'] or app.outdir.get()}")
+        Tooltip(self.btn_link, lambda: tr("tip_link"))
         Tooltip(self.btn_play, lambda: tr("tip_open") if item["status"] == "done" else (
             (tr("tip_stop_live") if item.get("is_live") else tr("tip_stop"))
             if item["status"] == "running" else tr("tip_play")))
         Tooltip(self.btn, lambda: tr("tip_delete"))
 
+        self._rz_t0, self._rz_n, self._rz_job = 0.0, 0, None
         self.bind("<Configure>", self._on_resize)
         self.refresh()
 
     def _on_resize(self, event):
+        """Name re-fitted once the layout settles (debounced). Never inside the event itself: a width that keeps
+        flipping would loop forever (it froze the start-up with a restored queue)."""
         if event.widget is self and event.width != self.last_w:
             self.last_w = event.width
-            self.refresh_name()
+            now = time.monotonic()
+            if now - self._rz_t0 > 1.0:
+                self._rz_t0, self._rz_n = now, 0
+            self._rz_n += 1
+            if self._rz_n > 8 or self._rz_job is not None:     # layout feedback loop: stop refreshing
+                return
+            self._rz_job = self.after(30, self._do_resize)
+
+    def _do_resize(self):
+        self._rz_job = None
+        try:
+            if self.winfo_exists():
+                self.refresh_name()
+        except tk.TclError:
+            pass
 
     def _name_px(self):
         """Pixels available for the file name: whatever the other columns leave free."""
@@ -2036,8 +2527,29 @@ class QueueRow(tk.Frame):
             others = sum(self.grid_bbox(c, 0)[2] for c, _ in COLS if c != 1)
         except tk.TclError:
             return NAME_PX
-        icons = self.btn_edit.winfo_reqwidth() + self.btn_dir.winfo_reqwidth() + 6
+        icons = self.btn_edit.winfo_reqwidth() + self.btn_dir.winfo_reqwidth() + self.btn_link.winfo_reqwidth() + 6
         return max(80, w - others - 8 - icons - 6)
+
+    def _copy_link(self):
+        try:
+            self.app.clipboard_clear()
+            self.app.clipboard_append(self.item["url"])
+            self.btn_link.config(text="✓", fg=GREEN)          # short confirmation
+            self.btn_link.base_fg = GREEN
+            self.after(1200, self._link_reset)
+        except tk.TclError:
+            pass
+
+    def _link_reset(self):
+        try:
+            self.btn_link.base_fg = MUTED
+            self.btn_link.config(text="🔗", fg=MUTED)
+        except tk.TclError:
+            pass
+
+    def _open_link(self, _event=None):
+        webbrowser.open(self.item["url"])
+        return "break"
 
     def refresh_name(self):
         name = self.item["name"]
@@ -2302,12 +2814,13 @@ class App(tk.Tk):
         self.sites_win = None
         self.settings_win = None
         self.logs_win = None
+        self.hist_win = None
         self._tpl_save_id = None
         self.url_err_on = False
         self.trim_cbs = []
         self.ffmpeg_warn = None
         self.i18n = []                   # (widget, key, upper) re-translated on language switch
-        global LANG, DATE_FMT, NAME_TPL, SPEED_VALUE, SPEED_UNLIM, TRAY, LIVE_FROM_START, COMPAT_EDIT
+        global LANG, DATE_FMT, NAME_TPL, SPEED_VALUE, SPEED_UNLIM, TRAY, LIVE_FROM_START, COMPAT_EDIT, VIDEO_CODEC, AUTO_RETRY, COOKIES_BROWSER
         saved = load_settings()
         TRAY = bool(saved.get("tray"))
         global NOTIFY_SOUND, NOTIFY_TOAST, NOTIFY_TONE, NOTIFY_VOL, NOTIFY_STYLE
@@ -2317,7 +2830,14 @@ class App(tk.Tk):
         NOTIFY_SOUND = saved.get("notify_sound", saved.get("notify", True)) is not False
         NOTIFY_TOAST = saved.get("notify_toast", saved.get("notify", True)) is not False
         LIVE_FROM_START = bool(saved.get("live_start"))
-        COMPAT_EDIT = saved.get("compat_edit", True) is not False
+        VIDEO_CODEC = saved.get("codec") or ("h264" if saved.get("compat_edit", True) is not False else "best")
+        if VIDEO_CODEC not in ("h264", "best", "vp9", "av1"):
+            VIDEO_CODEC = "h264"
+        COMPAT_EDIT = VIDEO_CODEC == "h264"
+        AUTO_RETRY = int(saved.get("retry", 2)) if str(saved.get("retry", 2)).isdigit() else 2
+        COOKIES_BROWSER = saved.get("cookies_browser") or ""
+        if COOKIES_BROWSER not in dict(COOKIE_BROWSERS):
+            COOKIES_BROWSER = ""          # a browser that can no longer be read (saved by an older version)
         self._tray = None
         try:
             SPEED_VALUE = max(float(saved.get("speed_limit") or 0), 0.0)
@@ -2352,6 +2872,13 @@ class App(tk.Tk):
         self.after(4000, trim_memory)
         if can_update("app"):
             self.after(6000, lambda: threading.Thread(target=self._bg_app_check, daemon=True).start())    # startup done: drop what was only needed to start
+        if COOKIES_BROWSER:              # read the cookies in the background: the first load is then as fast as without
+            def _warm():
+                try:
+                    cached_cookies(COOKIES_BROWSER)
+                except Exception:
+                    log("cookies warm-up failed: " + traceback.format_exc(), "warning")
+            self.after(2500, lambda: threading.Thread(target=_warm, daemon=True).start())
         if initial_url:                  # launched with a link
             self.after(300, lambda: self._open_external(initial_url))
 
@@ -2481,6 +3008,7 @@ class App(tk.Tk):
             except Exception:
                 log("queue restore failed for one line: " + traceback.format_exc(), "warning")
         self.pl_count = max(self.pl_count, len(colors))
+        self._load_row_thumbs([it for it in self.items if it.get("pl_color")])
         _ADDED[0] = max([_ADDED[0]] + [it.get("added", 0) for it in self.items])
         if self.items:
             self._refresh_queue()                 # the queue is shown only when it has lines
@@ -2488,6 +3016,7 @@ class App(tk.Tk):
         log(f"queue restored: {len(self.items)} line(s)")
 
     def _quit(self):
+        log("===== app closed =====")
         self.save_queue()
         if self._tray is not None:
             try:
@@ -2774,12 +3303,18 @@ class App(tk.Tk):
         self.btns.pack(fill="x", padx=24, pady=(0, 28))
         right = tk.Frame(self.btns, bg=BG)  # packed first: the buttons are never pushed out
         right.pack(side="right")
+        self.hist_btn = RoundButton(right, "", self.show_history, style="history")
+        self._t(self.hist_btn, "hist_btn")
+        self.hist_btn.pack(side="left", padx=(0, 10))
+        self.pick_btn = RoundButton(right, "", self.pick_videos, style="secondary")   # only shown for a playlist
+        self._t(self.pick_btn, "pick_btn")
         self.add_btn = RoundButton(right, "", self.add_to_queue, style="secondary", state="disabled")
         self._t(self.add_btn, "add")
         self.add_btn.pack(side="left", padx=(0, 10))
         self.dl_btn = RoundButton(right, "", self.download_now, state="disabled")
         self._t(self.dl_btn, "download")
         self.dl_btn.pack(side="left")
+        self._pick_shown = False
         left = tk.Frame(self.btns, bg=BG)
         left.pack(side="left", fill="x", expand=True)
         folder_btn = RoundButton(left, "", self.choose_dir, style="secondary")  # same size as the others
@@ -2836,6 +3371,14 @@ class App(tk.Tk):
         self.clear_btn = RoundButton(bar, "", self.clear_queue, style="danger")
         self._t(self.clear_btn, "clear_queue")
         self.clear_btn.pack(side="right", padx=(0, 10))
+        self.sched_at = None                     # (hour, minute) the queue starts at; not kept between launches
+        self.after_action = "none"               # none / sleep / shutdown when the queue ends (one-shot)
+        self._sched_target = None
+        self.qopts_btn = RoundButton(bar, "", self.queue_options, style="secondary")
+        self._t(self.qopts_btn, "q_opts")
+        self.qopts_btn.pack(side="left")
+        self.qopts_lbl = lbl(bar, "", 10, MUTED)
+        self.qopts_lbl.pack(side="left", padx=(12, 0))
 
         self._update_trim_availability()
 
@@ -2912,39 +3455,71 @@ class App(tk.Tk):
         win.resizable(False, False)
         win.transient(self)
         win.bind("<Escape>", lambda e: win.destroy())
-        box = card(win)
-        box.pack(padx=20, pady=20)
-        tabbar = tk.Frame(box, bg=CARD)
-        tabbar.pack(fill="x", padx=26, pady=(18, 0))
-        content = tk.Frame(box, bg=CARD)
-        content.pack(padx=26, pady=(16, 6), anchor="w")
-        footer = tk.Frame(box, bg=CARD)
-        footer.pack(fill="x", padx=26, pady=(8, 18))
-        pages = {k: tk.Frame(content, bg=CARD) for k in ("general", "dl", "notif")}
-        tab_btns = {}
+        # sidebar on the left (full height), one page of settings rows on the right
+        body = tk.Frame(win, bg=CARD)
+        body.pack(fill="both", expand=True)
+        tabbar = tk.Frame(body, bg=BG, width=176)
+        tabbar.pack(side="left", fill="y")
+        tabbar.pack_propagate(False)
+        tk.Frame(tabbar, bg=BG, height=12).pack()
+        side = tk.Frame(body, bg=CARD)
+        side.pack(side="left", fill="both", expand=True)
+        content = tk.Frame(side, bg=CARD)
+        content.pack(padx=28, pady=(24, 0), anchor="w")
+        footer = tk.Frame(side, bg=CARD)
+        footer.pack(fill="x", padx=28, pady=(14, 18))
+        pages = {k: tk.Frame(content, bg=CARD) for k in ("general", "dl", "notif", "adv")}
+        tab_ui = {}
 
         def show_tab(k):
             self._settings_tab = k
             for page in pages.values():
                 page.pack_forget()
-            pages[k].pack(anchor="nw")
-            for kk, b in tab_btns.items():
-                b.config(style="primary" if kk == k else "secondary")
+            pages[k].pack(fill="x", anchor="nw")
+            for kk, (f_, bar_, l_) in tab_ui.items():
+                on = kk == k
+                bg_ = CARD if on else BG
+                for w_ in (f_, l_):
+                    w_.config(bg=bg_)
+                bar_.config(bg=ACCENT if on else BG)
+                l_.config(fg=FG if on else MUTED, font=(FONT, 11, "bold" if on else "normal"))
+
         for k in pages:
-            tab_btns[k] = RoundButton(tabbar, tr("tab_" + k), lambda k=k: show_tab(k), small=True, style="secondary")
-            tab_btns[k].pack(side="left", padx=(0, 8))
-        inner = pages["general"]            # the sections below fill the pages one after the other
+            f_ = tk.Frame(tabbar, bg=BG, cursor="hand2")
+            bar_ = tk.Frame(f_, bg=BG, width=3)
+            bar_.pack(side="left", fill="y")
+            l_ = tk.Label(f_, text=tr("tab_" + k), bg=BG, fg=MUTED, font=(FONT, 11), anchor="w",
+                          padx=16, pady=11, cursor="hand2")
+            l_.pack(side="left", fill="x", expand=True)
+            f_.pack(fill="x")
+            tab_ui[k] = (f_, bar_, l_)
+            for w_ in (f_, bar_, l_):
+                w_.bind("<Button-1>", lambda e, k=k: show_tab(k))
+            l_.bind("<Enter>", lambda e, k=k: self._settings_tab != k and tab_ui[k][2].config(fg=FG))
+            l_.bind("<Leave>", lambda e, k=k: self._settings_tab != k and tab_ui[k][2].config(fg=MUTED))
+        rows_n = {}
 
-        def heading(text, first=False):
-            first = not inner.winfo_children()
-            lbl(inner, text, 11, MUTED, bold=True).pack(anchor="w", pady=(0 if first else 18, 8))
+        def setting(page, title, hint=None, wide=True):
+            """One settings row: the title takes the whole line (small accent bar before it), then the grey
+            explanation, then the control underneath."""
+            row = tk.Frame(page, bg=CARD)
+            row.pack(fill="x", pady=(0 if not rows_n.get(page) else 22, 0))
+            rows_n[page] = rows_n.get(page, 0) + 1
+            head = tk.Frame(row, bg=CARD)
+            head.pack(fill="x")
+            lbl(head, title, 11, FG, bold=True, anchor="w").pack(side="left")
+            if hint:
+                lbl(row, hint, 10, MUTED, justify="left", wraplength=470, anchor="w").pack(anchor="w", pady=(4, 0))
+            ctrl = tk.Frame(row, bg=CARD)
+            ctrl.pack(anchor="w", pady=(10, 0))
+            return ctrl
 
-        def segmented(options, current, on_pick, per_row=None):
+        def segmented(parent, options, current, on_pick, per_row=None, style_for=None):
             """Row(s) of buttons, the chosen one highlighted."""
             btns = {}
             rows = []
             for i in range(0, len(options), per_row or len(options)):
-                r_ = tk.Frame(inner, bg=CARD)
+                r_ = tk.Frame(parent, bg=CARD)
                 r_.pack(anchor="w", pady=(0 if i == 0 else 8, 0))
                 rows.append(r_)
 
@@ -2952,30 +3527,25 @@ class App(tk.Tk):
                 on_pick(value)
                 for v, b in btns.items():
                     if b.winfo_exists():
-                        b.config(style="primary" if v == value else "secondary")
+                        b.config(style=style_for(v, value) if style_for else ("primary" if v == value else "secondary"))
 
             for n_, (value, label) in enumerate(options):
                 row = rows[n_ // (per_row or len(options))]
                 b = RoundButton(row, label, lambda v=value: pick(v), small=True,
-                                style="primary" if value == current else "secondary")
+                                style=style_for(value, current) if style_for else ("primary" if value == current else "secondary"))
                 b.pack(side="left", padx=(0, 8))
                 btns[value] = b
+            return rows, btns
 
-        heading(tr("set_lang"), first=True)
-        segmented((("fr", "Français"), ("en", "English")), LANG, self.set_lang)
-        heading(tr("set_theme"))
-        trow_ = tk.Frame(inner, bg=CARD)
-        trow_.pack(anchor="w")
+        segmented(setting(pages["general"], tr("set_lang")), (("fr", "Français"), ("en", "English")), LANG, self.set_lang)
+        trow_ = setting(pages["general"], tr("set_theme"), wide=True)
         for k_ in ("dark", "light", "sakura", "cyberpunk", "hacker"):   # each chip is drawn in its own theme
             ThemeChip(trow_, tr("theme_" + k_), k_, k_ == THEME, lambda k=k_: self.set_theme_choice(k)
                       ).pack(side="left", padx=(0, 8))
-        heading(tr("set_date"))
-        segmented(tuple((k, tr("date_" + k)) for k in ("eu", "us", "iso")), DATE_FMT, self.set_date_fmt)
+        segmented(setting(pages["general"], tr("set_date")),
+                  tuple((k, tr("date_" + k)) for k in ("eu", "us", "iso")), DATE_FMT, self.set_date_fmt)
 
-        inner = pages["dl"]
-        heading(tr("set_speed"))
-        srow = tk.Frame(inner, bg=CARD)
-        srow.pack(anchor="w")
+        srow = setting(pages["dl"], tr("set_speed"), wide=True)
         speed_var = tk.StringVar(value=f"{SPEED_VALUE:g}" if SPEED_VALUE > 0 else "")
         # "unlimited" box, same look as the field; the blue outline marks the active one
         inf_btn = tk.Frame(srow, bg=CARD2, highlightthickness=1, cursor="hand2")
@@ -3043,46 +3613,129 @@ class App(tk.Tk):
 
         speed_ent.bind("<MouseWheel>", speed_wheel)
 
-        heading(tr("set_compat"))
 
-        def set_compat(v):
-            global COMPAT_EDIT
-            COMPAT_EDIT = v == "edit"
-            save_settings(compat_edit=COMPAT_EDIT)
-        segmented((("edit", tr("compat_edit")), ("best", tr("compat_best"))),
-                  "edit" if COMPAT_EDIT else "best", set_compat)
-        lbl(inner, tr("compat_hint"), 10, MUTED, justify="left", wraplength=420).pack(anchor="w", pady=(6, 0))
+        def set_codec(v):
+            global VIDEO_CODEC, COMPAT_EDIT
+            VIDEO_CODEC, COMPAT_EDIT = v, v == "h264"
+            save_settings(codec=v, compat_edit=COMPAT_EDIT)
+        segmented(setting(pages["adv"], tr("set_codec"), tr("codec_hint"), wide=True),
+                  (("h264", tr("codec_h264")), ("best", tr("codec_best")), ("vp9", tr("codec_vp9")), ("av1", tr("codec_av1"))),
+                  VIDEO_CODEC, set_codec)
 
-        heading(tr("set_live"))
+        def set_retry(v):
+            global AUTO_RETRY
+            AUTO_RETRY = int(v)
+            save_settings(retry=AUTO_RETRY)
+        segmented(setting(pages["adv"], tr("set_retry"), tr("retry_hint")),
+                  (("0", tr("retry_off")), ("1", "1"), ("2", "2"), ("3", "3"), ("5", "5")), str(AUTO_RETRY), set_retry)
+
+        ck_box = setting(pages["adv"], tr("set_cookies"), tr("cookies_why"), wide=True)
+
+        def set_cookies(v):
+            global COOKIES_BROWSER
+            COOKIES_BROWSER = v
+            save_settings(cookies_browser=v)
+            self._test_cookies()
+        self._ck_status = {}      # browser -> True (cookies found) / False (none), set by "Check cookies"
+
+        def ck_style(v, chosen):
+            if v == chosen:
+                return "primary"
+            st = self._ck_status.get(v)
+            return "secondary" if st is None or not v else ("ck_ok" if st else "ck_bad")
+        _, self._ck_btns = segmented(ck_box, (("", tr("cookies_none")),) + COOKIE_BROWSERS, COOKIES_BROWSER, set_cookies,
+                                     style_for=ck_style)
+        self._ck_style = ck_style
+        ck_row = tk.Frame(ck_box, bg=CARD)
+        ck_row.pack(anchor="w", pady=(10, 0))
+        # result to the right of the button; room for 3 lines is kept so it never covers the text below
+        ck_res = tk.Frame(ck_row, bg=CARD, width=470, height=36)
+        ck_res.pack(side="left")
+        ck_res.pack_propagate(False)
+        self._ck_lbl = lbl(ck_res, "", 10, MUTED, justify="left", wraplength=470, anchor="w")
+        self._ck_lbl.pack(anchor="w")
+        self._ck_url = ""
+        self._ck_link = tk.Label(ck_res, text="", bg=CARD, fg=ACCENT_HI, cursor="hand2", font=(FONT, 10, "underline"))
+        self._ck_link.bind("<Button-1>", lambda e: self._ck_url and webbrowser.open(self._ck_url))
+        self._test_cookies()
+
+        # manual import: a cookies.txt exported from any browser
+        imp_row = tk.Frame(ck_box, bg=CARD)
+        imp_row.pack(anchor="w", pady=(2, 0))
+        imp_lbl = lbl(imp_row, "", 10, MUTED, anchor="w")
+        rm_btn = RoundButton(imp_row, tr("ck_remove"), lambda: None, small=True, style="secondary")
+
+        def file_status():
+            path = cookies_file_path()
+            if os.path.exists(path):
+                imp_lbl.config(text=tr("ck_file_ok", n=count_cookies_file(path)), fg=GREEN)
+                rm_btn.pack(side="left", padx=(10, 0))
+            else:
+                imp_lbl.config(text="")
+                rm_btn.pack_forget()
+
+        def import_cookies():
+            src = filedialog.askopenfilename(parent=win, title=tr("ck_import"),
+                                             filetypes=[("cookies.txt", "*.txt"), ("*", "*.*")])
+            if not src:
+                return
+            if count_cookies_file(src) == 0:
+                imp_lbl.config(text=tr("ck_file_bad"), fg=RED)
+                rm_btn.pack_forget()
+                return
+            try:
+                shutil.copyfile(src, cookies_file_path())
+            except OSError as ex:
+                imp_lbl.config(text="✖ " + str(ex)[:80], fg=RED)
+                return
+            file_status()
+
+        def remove_cookies():
+            try:
+                os.remove(cookies_file_path())
+            except OSError:
+                pass
+            file_status()
+
+        rm_btn.config(command=remove_cookies)
+        imp_btn = RoundButton(imp_row, tr("ck_import"), import_cookies, small=True, style="secondary")
+        imp_btn.pack(side="left")
+        imp_lbl.pack(side="left", padx=(10, 0))
+        lbl(ck_box, tr("cookies_import_hint"), 10, MUTED, justify="left", wraplength=470,
+            anchor="w").pack(anchor="w", pady=(6, 0))
+        file_status()
+
 
         def set_live(v):
             global LIVE_FROM_START
             LIVE_FROM_START = v == "start"
             save_settings(live_start=LIVE_FROM_START)
-        segmented((("now", tr("live_now")), ("start", tr("live_start"))),
-                  "start" if LIVE_FROM_START else "now", set_live)
-        lbl(inner, tr("live_hint"), 10, MUTED, justify="left", wraplength=420).pack(anchor="w", pady=(6, 0))
+        segmented(setting(pages["dl"], tr("set_live"), tr("live_hint")),
+                  (("now", tr("live_now")), ("start", tr("live_start"))), "start" if LIVE_FROM_START else "now", set_live)
 
-        inner = pages["notif"]
-        heading(tr("notif_sound"))
+        def set_toast(v):
+            global NOTIFY_TOAST
+            NOTIFY_TOAST = v == "on"
+            save_settings(notify_toast=NOTIFY_TOAST)
+        segmented(setting(pages["notif"], tr("notif_toast")), (("on", tr("notif_on")), ("off", tr("notif_off"))),
+                  "on" if NOTIFY_TOAST else "off", set_toast)
 
         def set_sound(v):
             global NOTIFY_SOUND
             NOTIFY_SOUND = v == "on"
             save_settings(notify_sound=NOTIFY_SOUND)
-        segmented((("on", tr("notif_on")), ("off", tr("notif_off"))), "on" if NOTIFY_SOUND else "off", set_sound)
-        heading(tr("notif_tone"))
+        segmented(setting(pages["notif"], tr("notif_sound")), (("on", tr("notif_on")), ("off", tr("notif_off"))),
+                  "on" if NOTIFY_SOUND else "off", set_sound)
 
         def set_tone(v):
             global NOTIFY_TONE
             NOTIFY_TONE = int(v)
             save_settings(notify_tone=NOTIFY_TONE)
             play_chime()                             # preview
-        segmented(tuple((str(k), tr(f"tone_{k}")) for k in (1, 2, 3, 4)), str(NOTIFY_TONE), set_tone)
+        segmented(setting(pages["notif"], tr("notif_tone"), wide=True),
+                  tuple((str(k), tr(f"tone_{k}")) for k in (1, 2, 3, 4)), str(NOTIFY_TONE), set_tone)
 
-        heading(tr("vol"))
-        vrow_ = tk.Frame(inner, bg=CARD)
-        vrow_.pack(anchor="w")
+        vrow_ = setting(pages["notif"], tr("vol"))
         pct = lbl(vrow_, f"{NOTIFY_VOL}%", 10, MUTED, width=5, anchor="e")
 
         def vol_changed(v):
@@ -3095,14 +3748,6 @@ class App(tk.Tk):
             play_chime()                                  # preview
         Slider(vrow_, NOTIFY_VOL, vol_changed, vol_released).pack(side="left")
         pct.pack(side="left", padx=(8, 0))
-        heading(tr("notif_toast"))
-
-        def set_toast(v):
-            global NOTIFY_TOAST
-            NOTIFY_TOAST = v == "on"
-            save_settings(notify_toast=NOTIFY_TOAST)
-        segmented((("on", tr("notif_on")), ("off", tr("notif_off"))), "on" if NOTIFY_TOAST else "off", set_toast)
-        heading(tr("notif_style"))
 
         def set_style(v):
             global NOTIFY_STYLE
@@ -3110,28 +3755,25 @@ class App(tk.Tk):
             save_settings(notify_style=NOTIFY_STYLE)
             self.show_toast(tr("toast_done"), (self.current or {}).get("title") or tr("sample_title"),
                             lambda: None, (self.current or {}).get("thumb"), lambda: None)      # preview
-        segmented(tuple((str(k), tr(f"style_{k}")) for k in (1, 2, 3)), str(NOTIFY_STYLE), set_style)
-        tk.Frame(inner, bg=CARD, height=18).pack()
-        trow = tk.Frame(inner, bg=CARD)
-        trow.pack(anchor="w")
+        segmented(setting(pages["notif"], tr("notif_style"), wide=True),
+                  tuple((str(k), tr(f"style_{k}")) for k in (1, 2, 3)), str(NOTIFY_STYLE), set_style)
+        trow = tk.Frame(pages["notif"], bg=CARD)
+        trow.pack(anchor="w", pady=(18, 0))
         RoundButton(trow, tr("notif_test"), lambda: (play_chime(), self.show_toast(
             tr("toast_done"), (self.current or {}).get("title") or tr("sample_title"), lambda: None,
             (self.current or {}).get("thumb"), lambda: None)), small=True, style="secondary").pack(side="left")
 
-        inner = pages["general"]
-        heading(tr("set_close"))
         if pystray is None:
-            lbl(inner, tr("close_need"), 10, MUTED).pack(anchor="w")
+            setting(pages["general"], tr("set_close"), tr("close_need"))
         else:
             def set_close(v):
                 global TRAY
                 TRAY = v == "tray"
                 save_settings(tray=TRAY)
-            segmented((("quit", tr("close_quit")), ("tray", tr("close_tray"))),
+            segmented(setting(pages["general"], tr("set_close")), (("quit", tr("close_quit")), ("tray", tr("close_tray"))),
                       "tray" if TRAY else "quit", set_close)
 
-        inner = pages["dl"]
-        heading(tr("set_name"))
+        inner = setting(pages["dl"], tr("set_name"), wide=True)
         var = tk.StringVar(value=NAME_TPL)
         ent = self._entry(inner, textvariable=var, width=42)
         ent.pack(fill="x", ipady=5)
@@ -3187,18 +3829,177 @@ class App(tk.Tk):
         content.pack_propagate(False)
         show_tab(start_tab)
         win.update_idletasks()
-        if geometry:
-            win.geometry(geometry)
+        apply_titlebar_theme(win)
+        try:
+            win.attributes("-alpha", 0.0)    # shown invisible first: centred on its real size, no jump
+        except tk.TclError:
+            pass
+        win.deiconify()
+        win.update()
+        if geometry:                         # rebuilt window (language / theme): same centre as the old one
+            ox, oy, ow, oh = geometry
+            nx = max(ox + (ow - win.winfo_width()) // 2, 0)
+            ny = max(oy + (oh - win.winfo_height()) // 2, 0)
+            win.geometry(f"+{nx}+{ny}")
         else:
             self._center(win)
-        apply_titlebar_theme(win)
-        win.deiconify()
         win.update_idletasks()
+        try:
+            win.attributes("-alpha", 1.0)
+        except tk.TclError:
+            pass
         if replace is not None:              # the old window goes only once the new one is on screen
             try:
                 replace.destroy()
             except tk.TclError:
                 pass
+
+    def _ck_show(self, text, fg, url=""):
+        """Cookie test result; with a link "click here for more info" when the error carries one."""
+        self._ck_lbl.config(text=text, fg=fg)
+        self._ck_url = url
+        if url:
+            self._ck_link.config(text=tr("ck_more"))
+            self._ck_link.pack(anchor="w")
+        else:
+            self._ck_link.pack_forget()
+
+    def _test_cookies(self):
+        """Reads the chosen browser's cookies in the background and shows a tick / cross with the result."""
+        lbl_ = getattr(self, "_ck_lbl", None)
+        try:
+            if lbl_ is None or not lbl_.winfo_exists():
+                return
+            if not COOKIES_BROWSER:
+                self._ck_show("", MUTED)
+                return
+            self._ck_show(tr("ck_testing"), MUTED)
+        except tk.TclError:
+            return
+        threading.Thread(target=self._cookie_worker, args=(COOKIES_BROWSER,), daemon=True).start()
+
+    def _cookie_worker(self, browser):
+        try:
+            cookies = cached_cookies(browser, force=True)
+            yt = sum(1 for c in cookies if "youtube.com" in (c.domain or "") or "google.com" in (c.domain or ""))
+            log(f"cookies test ({browser}): {len(cookies)} cookies, {yt} youtube/google")
+            self.events.put(("cookie_test", browser, True, len(cookies), yt, ""))
+        except Exception as e:
+            log(f"cookies test ({browser}) failed: {clean(str(e))}", "warning")
+            self.events.put(("cookie_test", browser, False, 0, 0, clean(str(e))[:160]))
+
+    def show_history(self):
+        """Finished downloads (newest first): open the file or its folder."""
+        if self.hist_win is not None and self.hist_win.winfo_exists():
+            self.hist_win.lift()
+            self.hist_win.focus_force()
+            return
+        win = self.hist_win = tk.Toplevel(self)
+        win.title(tr("hist_title"))
+        win.configure(bg=BG)
+        win.resizable(False, False)
+        win.transient(self)
+        win.bind("<Escape>", lambda e: win.destroy())
+        box = card(win)
+        box.pack(padx=20, pady=20)
+        inner = tk.Frame(box, bg=CARD)
+        inner.pack(padx=22, pady=18)
+        lbl(inner, tr("hist_title"), 14, FG, bold=True).pack(anchor="w", pady=(0, 10))
+        data = load_history()
+        f11 = tkfont.Font(family=FONT, size=11)
+        if not data:
+            lbl(inner, tr("hist_empty"), 11, MUTED).pack(anchor="w", pady=20)
+        else:
+            state = {"sort": "new"}
+            ctl = tk.Frame(inner, bg=CARD)               # search + sort
+            ctl.pack(fill="x", pady=(0, 10))
+            qvar = tk.StringVar()
+            lbl(ctl, tr("hist_search"), 10, MUTED).pack(side="left", padx=(0, 8))
+            qent = self._entry(ctl, textvariable=qvar, width=26)
+            qent.pack(side="left", ipady=4)
+            sort_btns = {}
+            for key_, label_ in (("name", tr("hist_sort_name")), ("old", tr("hist_sort_old")), ("new", tr("hist_sort_new"))):
+                sort_btns[key_] = RoundButton(ctl, label_, lambda k=key_: set_sort(k), small=True,
+                                              style="primary" if key_ == "new" else "secondary")
+                sort_btns[key_].pack(side="right", padx=(6, 0))
+            listbox = tk.Frame(inner, bg=CARD2, highlightthickness=1, highlightbackground=BORDER)
+            listbox.pack(fill="both")
+            canvas = tk.Canvas(listbox, bg=CARD2, highlightthickness=0, width=640, height=360)
+            sb = ttk.Scrollbar(listbox, orient="vertical", command=canvas.yview)
+            canvas.configure(yscrollcommand=sb.set)
+            canvas.pack(side="left", fill="both")
+            frame = tk.Frame(canvas, bg=CARD2)
+            canvas.create_window((0, 0), window=frame, anchor="nw")
+
+            def wheel(e):
+                canvas.yview_scroll(int(-e.delta / 120), "units")
+                return "break"
+
+            def populate(*_):
+                for w_ in frame.winfo_children():
+                    w_.destroy()
+                q = qvar.get().strip().casefold()
+                rows = [e for e in data if q in (e.get("title") or "").casefold()]
+                if state["sort"] == "name":
+                    rows.sort(key=lambda e: (e.get("title") or "").casefold())
+                else:
+                    rows.sort(key=lambda e: e.get("date") or "", reverse=state["sort"] == "new")
+                if not rows:
+                    tk.Label(frame, text=tr("hist_none"), bg=CARD2, fg=MUTED, font=(FONT, 11)).pack(padx=16, pady=20)
+                for e in rows:
+                    path = e.get("path") or ""
+                    exists = os.path.exists(path)
+                    row = tk.Frame(frame, bg=CARD2)
+                    row.pack(fill="x", padx=8, pady=4)
+                    info = tk.Frame(row, bg=CARD2, width=400, height=40)
+                    info.pack(side="left")
+                    info.pack_propagate(False)
+                    tk.Label(info, text=fit_text(e.get("title") or "", f11, 390), bg=CARD2, fg=FG if exists else DIM,
+                             font=(FONT, 11), anchor="w").pack(fill="x")
+                    sub = (e.get("date") or "") + (f"  ·  {e['quality']}" if e.get("quality") else "")
+                    if not exists:
+                        sub += "  ·  " + tr("hist_missing")
+                    tk.Label(info, text=sub, bg=CARD2, fg=MUTED, font=(FONT, 9), anchor="w").pack(fill="x")
+                    fb = RoundButton(row, tr("hist_folder"), lambda p=path: self.open_location(
+                        {"filepath": p, "outdir": os.path.dirname(p)}), small=True, style="secondary",
+                        state="normal" if exists else "disabled")
+                    fb.pack(side="right")
+                    ob = RoundButton(row, tr("hist_open"), lambda p=path: self.play_file({"filepath": p}), small=True,
+                                     style="primary", state="normal" if exists else "disabled")
+                    ob.pack(side="right", padx=(0, 8))
+                    for w_ in (row, info, *info.winfo_children()):
+                        w_.bind("<MouseWheel>", wheel)
+                frame.update_idletasks()
+                canvas.configure(scrollregion=(0, 0, 640, frame.winfo_reqheight()))
+                canvas.yview_moveto(0)
+                if frame.winfo_reqheight() <= 360:
+                    sb.pack_forget()
+                else:
+                    sb.pack(side="right", fill="y", before=canvas)
+
+            def set_sort(k):
+                state["sort"] = k
+                for kk, b_ in sort_btns.items():
+                    b_.config(style="primary" if kk == k else "secondary")
+                populate()
+            canvas.bind("<MouseWheel>", wheel)
+            frame.bind("<MouseWheel>", wheel)
+            qvar.trace_add("write", populate)
+            populate()
+
+        def clear():
+            if self.ask_yes_no(tr("hist_title"), tr("hist_confirm")):
+                save_history([])
+                win.destroy()
+                self.show_history()
+        brow = tk.Frame(inner, bg=CARD)
+        brow.pack(fill="x", pady=(14, 0))
+        RoundButton(brow, tr("info_close"), win.destroy, small=True, style="secondary").pack(side="right")
+        if data:
+            RoundButton(brow, tr("hist_clear"), clear, small=True, style="danger").pack(side="left")
+        win.update_idletasks()
+        self._center(win)
+        apply_titlebar_theme(win)
 
     def show_logs(self):
         """Log window: what the app and yt-dlp do, errors in red (for debugging)."""
@@ -3244,6 +4045,7 @@ class App(tk.Tk):
                     txt.insert("end", msg + "\n", level)
                 if at_end:
                     txt.see("end")
+                    txt.after_idle(lambda: txt.winfo_exists() and txt.yview_moveto(1.0))
             win.after(500, refresh)
 
         def copy():
@@ -3255,15 +4057,22 @@ class App(tk.Tk):
         def clear():
             with LOG_LOCK:
                 LOG.clear()
+                try:
+                    open(log_file_path(), "w", encoding="utf-8").close()     # the saved history goes too
+                except OSError:
+                    pass
             shown[0] = 0
             txt.delete("1.0", "end")
 
         copy_btn = RoundButton(bar, tr("log_copy"), copy, small=True, style="secondary")
-        copy_btn.pack(side="left")
-        RoundButton(bar, tr("log_clear"), clear, small=True, style="secondary").pack(side="left", padx=(8, 0))
+        copy_btn.pack(side="right")                                   # copy: bottom right, clear: bottom left
+        RoundButton(bar, tr("log_clear"), clear, small=True, style="secondary").pack(side="left")
         refresh()
         self._center(win)
         apply_titlebar_theme(win)
+        win.update_idletasks()
+        txt.yview_moveto(1.0)                                         # opens on the latest lines
+        win.after(150, lambda: win.winfo_exists() and txt.yview_moveto(1.0))
 
     def _schedule_save(self):
         """Saves the typed settings (file-name template, speed limit) shortly after the last keystroke."""
@@ -3281,7 +4090,7 @@ class App(tk.Tk):
         """Rebuilds the settings window in place (new language / theme colours)."""
         old = self.settings_win
         if old is not None and old.winfo_exists():
-            geo = f"+{old.winfo_x()}+{old.winfo_y()}"
+            geo = (old.winfo_x(), old.winfo_y(), old.winfo_width(), old.winfo_height())   # keeps the same centre
             self.settings_win = None
             self.show_settings(geo, replace=old)
         else:
@@ -3690,8 +4499,20 @@ class App(tk.Tk):
             # extract_flat: a playlist is listed quickly (no full analysis of every video)
             opts = {"quiet": True, "no_warnings": True, "noplaylist": True, "logger": QuietLogger(),
                     "extract_flat": "in_playlist"}
-            with yt_dlp.YoutubeDL(opts) as ydl:
-                info = ydl.extract_info(url, download=False)
+            opts["ignore_no_formats_error"] = True        # the info is enough here: formats are picked at download time
+            try:                                          # cookies cost seconds: only used when the video needs them
+                with yt_dlp.YoutubeDL(opts) as ydl:
+                    info = ydl.extract_info(url, download=False)
+                if info.get("_type") != "playlist" and info.get("availability") in LOGIN_AVAIL:
+                    raise RuntimeError("Sign in required (" + str(info.get("availability")) + ")")
+            except Exception as ex:
+                if not (cookies_available() and needs_login(ex)):
+                    raise
+                log("login needed: retrying with the browser cookies", "info")
+                opts.update(js_runtime_opts())
+                with yt_dlp.YoutubeDL(opts) as ydl:
+                    apply_cookies(ydl)
+                    info = ydl.extract_info(url, download=False)
             if info.get("_type") == "playlist":
                 entries = []
                 for e in info.get("entries") or []:
@@ -3709,7 +4530,7 @@ class App(tk.Tk):
                         "duration": e.get("duration") or 0, "view_count": e.get("view_count"),
                         "date_raw": e.get("upload_date") or "",
                         "upload_date": fmt_date(e["upload_date"]) if e.get("upload_date") else "",
-                        "thumb": None, "sizes": {}})
+                        "thumb": None, "thumb_url": small_thumb_url(e), "sizes": {}})
                 if not entries:
                     raise NotAVideo()
                 th = (info.get("thumbnails") or (info["entries"][0] or {}).get("thumbnails") or [{}])[-1].get("url")
@@ -3723,7 +4544,7 @@ class App(tk.Tk):
         except NotAVideo:
             self.events.put(("fetch_error", None))
         except Exception as e:
-            self.events.put(("fetch_error", clean(str(e))))
+            self.events.put(("fetch_error", cookie_hint(clean(str(e)))))
 
     def show_info(self):
         if self.info_win is not None and self.info_win.winfo_exists():
@@ -3737,9 +4558,9 @@ class App(tk.Tk):
         win.transient(self)
         win.bind("<Escape>", lambda e: win.destroy())
         box = card(win)
-        box.pack(padx=20, pady=20)
+        box.pack(padx=20, pady=20, fill="both", expand=True)
         inner = tk.Frame(box, bg=CARD)
-        inner.pack(padx=24, pady=20)
+        inner.pack(padx=24, pady=20, fill="both", expand=True)
 
         self.chk = {}  # section title -> status label (filled by the install check)
         self.upd = {}  # section title -> "Update" button (shown only when an update exists)
@@ -3748,13 +4569,13 @@ class App(tk.Tk):
             head = tk.Frame(inner, bg=CARD)
             head.pack(anchor="w")
             lbl(head, tr("title") if title == "app" else title, 14, FG, bold=True).pack(side="left")
+            if title == "app":
+                lbl(head, f"v{APP_VERSION}", 12, MUTED).pack(side="left", padx=(8, 0))
             self.chk[title] = lbl(head, "", 11, MUTED, bold=True)
             self.chk[title].pack(side="left", padx=(12, 0))
-            holder = tk.Frame(inner, bg=CARD)  # zero height while the button is hidden
-            holder.pack(anchor="w")
-            self.upd[title] = RoundButton(holder, tr("info_update"),
+            self.upd[title] = RoundButton(head, tr("info_update"),
                                           lambda t=title: self._run_update(t), small=True)
-            lbl(inner, body, 11, MUTED, justify="left", wraplength=460).pack(anchor="w", pady=(6, 12))
+            lbl(inner, body, 11, MUTED, justify="left", wraplength=600).pack(anchor="w", pady=(6, 12))
             if command:
                 lbl(inner, tr("info_install"), 10, MUTED, bold=True).pack(anchor="w")
                 cmd = tk.Entry(inner, font=("Consolas", 11), bg=CARD2, fg=FG, readonlybackground=CARD2,
@@ -3780,6 +4601,9 @@ class App(tk.Tk):
         section("ffmpeg", tr("info_ffmpeg_bundled" if ff_bundled else "info_ffmpeg_body"),
                 None if ff_bundled else "winget install ffmpeg",
                 [(tr("info_ffmpeg_site"), FFMPEG_URL)])
+        tk.Frame(inner, bg=BORDER, height=1).pack(fill="x", pady=16)
+        lbl(inner, tr("priv_title"), 14, FG, bold=True).pack(anchor="w")
+        lbl(inner, tr("priv_body"), 11, MUTED, justify="left", wraplength=600).pack(anchor="w", pady=(6, 0))
         btn_row = tk.Frame(inner, bg=CARD)
         btn_row.pack(fill="x", pady=(18, 0))
         self.chk_btn = RoundButton(btn_row, tr("info_check"), self._run_check, small=True)
@@ -3787,8 +4611,47 @@ class App(tk.Tk):
         RoundButton(btn_row, tr("info_close"), win.destroy, small=True,
                     style="secondary").pack(side="right")
         win.update_idletasks()
+        win.geometry(f"{win.winfo_reqwidth() + 140}x{win.winfo_reqheight()}")   # fixed size: statuses never resize it
         self._center(win)
         apply_titlebar_theme(win)
+
+    def _update_prompt(self, ver):
+        """Themed popup at launch: update now or ignore (the Info menu keeps the manual update)."""
+        win = tk.Toplevel(self)
+        win.title(tr("upd_title"))
+        win.configure(bg=BG)
+        win.resizable(False, False)
+        win.transient(self)
+        box = card(win)
+        box.pack(padx=20, pady=20)
+        inner = tk.Frame(box, bg=CARD)
+        inner.pack(padx=26, pady=22)
+        lbl(inner, tr("upd_msg", v=ver, cur=APP_VERSION), 11, FG, justify="left", wraplength=380).pack(anchor="w")
+        link = tk.Label(inner, text="↗ " + tr("upd_notes"), bg=CARD, fg=ACCENT_HI, cursor="hand2",
+                        font=(FONT, 11, "underline"))
+        link.pack(anchor="w", pady=(12, 0))
+        link.bind("<Button-1>", lambda e: webbrowser.open(APP_RELEASES_URL))
+        row = tk.Frame(inner, bg=CARD)
+        row.pack(fill="x", pady=(20, 0))
+
+        def go():
+            win.destroy()
+            self._start_app_update()
+        RoundButton(row, tr("upd_now"), go, small=True, style="primary").pack(side="right", padx=(8, 0))
+        ign = RoundButton(row, tr("upd_ignore"), win.destroy, small=True, style="secondary")
+        ign.pack(side="right")
+        Tooltip(ign, lambda: tr("upd_ignore_tip"))
+        win.bind("<Escape>", lambda e: win.destroy())
+        win.update_idletasks()
+        self._center(win)
+        apply_titlebar_theme(win)
+        win.focus_force()
+
+    def _start_app_update(self):
+        if self.running or self.active > 0:
+            self.alert(tr("info_title"), tr("app_busy"))
+            return
+        threading.Thread(target=self._do_update, args=("app",), daemon=True).start()
 
     def _bg_app_check(self):
         ver, url = latest_app()
@@ -3832,6 +4695,7 @@ class App(tk.Tk):
         checks = (("yt-dlp", yt), ("ffmpeg", ff)) + ((("app", app),) if app else ())
         for key, (ok, ver, latest) in checks:
             w = self.chk[key]
+            ver = (ver or "").split("-")[0]                  # "9.0.2-essentials_build-…" -> "9.0.2"
             installed = "✔ " + tr("info_ok") + (f" ({ver})" if ver else "")
             self.upd[key].pack_forget()
             if not ok:
@@ -3839,11 +4703,10 @@ class App(tk.Tk):
             elif newer(latest, ver):
                 if can_update(key) and (key != "app" or APP_UPDATE.get("url")):
                     self.upd[key].config(state="normal", text=tr("info_update"))
-                    self.upd[key].pack(anchor="w", pady=(6, 0))
-                w.config(text="⚠ " + tr("info_ok") + (f" ({ver})" if ver else "")
-                         + " — " + tr("info_outdated", v=latest), fg=ORANGE)
+                    self.upd[key].pack(side="left", padx=(12, 0))     # on the title line: the window keeps its height
+                w.config(text="⚠ " + tr("info_outdated", v=latest), fg=ORANGE)
             elif latest and vtuple(ver):
-                w.config(text=installed + " — " + tr("info_uptodate"), fg=GREEN)
+                w.config(text="✔ " + tr("info_uptodate") + (f" ({ver})" if ver else ""), fg=GREEN)
             else:
                 w.config(text=installed, fg=GREEN)  # up-to-date status unknown (offline, git build…)
         self.chk_btn.config(state="normal", text=tr("info_check"))
@@ -3865,6 +4728,9 @@ class App(tk.Tk):
             self.events.put(("update_done", key, False, str(e).strip()[:120]))
 
     def _show_update(self, key, ok, msg):
+        if not ok and key == "app" and (self.info_win is None or not self.info_win.winfo_exists()):
+            self.alert(tr("info_title"), tr("info_upd_fail") + (f" : {msg}" if msg else ""))
+            return
         if ok and key == "app":                 # the installer is running: leave so it can replace the files
             log("app update: installer started, quitting")
             self._quit()
@@ -3923,6 +4789,7 @@ class App(tk.Tk):
     def _dialog(self, title, message, buttons, default, cancel):
         """Themed modal box centered on the tool. buttons = [(label, value)] shown right to left reversed."""
         win = tk.Toplevel(self)
+        win.withdraw()                      # hidden until centered: no flash in the corner
         win.title(title)
         win.configure(bg=BG)
         win.resizable(False, False)
@@ -3948,6 +4815,7 @@ class App(tk.Tk):
         win.update_idletasks()
         self._center(win)
         apply_titlebar_theme(win)
+        win.deiconify()
         win.grab_set()
         win.focus_force()
         self.wait_window(win)
@@ -4365,6 +5233,7 @@ class App(tk.Tk):
 
     def _show_info(self, info, thumb, url):
         self._set_url_error(False)
+        self._set_pick_visible(False)
         self.load_btn.config(busy=False, state="normal", text=tr("load"))
         self.current = {
             "url": info.get("webpage_url") or url,
@@ -4441,6 +5310,8 @@ class App(tk.Tk):
                         "channel": pl["channel"], "view_count": None,
                         "duration": sum(e["duration"] for e in entries),
                         "upload_date": "", "date_raw": "", "thumb": thumb, "sizes": {}}
+        self.pick_btn.config(text=tr("pick_btn"))
+        self._set_pick_visible(len(entries) > 1)
         if thumb:
             self.thumb_photo = ImageTk.PhotoImage(thumb.resize((210, 118), Image.Resampling.LANCZOS))
             self.thumb_label.config(image=self.thumb_photo, text="")
@@ -4460,16 +5331,193 @@ class App(tk.Tk):
         self._refresh_trim()
         self._refresh_info()
 
+    def _load_row_thumbs(self, items):
+        jobs = [(id(it), it["thumb_url"]) for it in items if it.get("thumb_url") and not it.get("thumb")]
+        if not jobs:
+            return
+        by_id = {id(it): it for it in items}
+        load_small_thumbs(jobs, lambda k, img: self.events.put(("row_thumb", by_id[k], img)))
+
+    def _set_pick_visible(self, on):
+        if on and not self._pick_shown:
+            self.pick_btn.pack(side="left", padx=(0, 10), before=self.add_btn)
+            self._pick_shown = True
+        elif not on and self._pick_shown:
+            self.pick_btn.pack_forget()
+            self._pick_shown = False
+
+    def pick_videos(self):
+        c = self.current
+        if not c or not c.get("playlist"):
+            return
+        try:
+            preset = c.get("chosen") or [e for e in c["entries"] if not self._dup_info(e.get("url"))] or None
+            chosen = self._pick_playlist(c["title"], c["entries"], preset, "pl_ok")
+        except Exception:
+            log("pick videos failed: " + traceback.format_exc(), "error")
+            return
+        if chosen:
+            c["chosen"] = chosen
+            self.pick_btn.config(text=tr("pick_btn_n", n=len(chosen), t=len(c["entries"])))
+
+    def _pick_playlist(self, title, entries, preset=None, ok_key="pl_add"):
+        """Themed window with a check box per video. Returns the chosen entries, or None if cancelled."""
+        win = tk.Toplevel(self)
+        win.withdraw()                      # hidden until centered: no flash in the corner
+        win.title(tr("pl_pick_title"))
+        win.configure(bg=BG)
+        win.resizable(False, False)
+        win.transient(self)
+        box = card(win)
+        box.pack(padx=20, pady=20)
+        inner = tk.Frame(box, bg=CARD)
+        inner.pack(padx=22, pady=18)
+        f11 = tkfont.Font(family=FONT, size=11)
+        lbl(inner, fit_text(tr("pl_pick_msg", title=title), f11, 560), 11, FG, bold=True).pack(anchor="w")
+        top = tk.Frame(inner, bg=CARD)
+        top.pack(fill="x", pady=(10, 8))
+        listbox = tk.Frame(inner, bg=CARD2, highlightthickness=1, highlightbackground=BORDER)
+        listbox.pack(fill="both")
+        canvas = tk.Canvas(listbox, bg=CARD2, highlightthickness=0, width=560, height=340)
+        sb = ttk.Scrollbar(listbox, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=sb.set)
+        sb.pack(side="right", fill="y")
+        canvas.pack(side="left", fill="both")
+        frame = tk.Frame(canvas, bg=CARD2)
+        canvas.create_window((0, 0), window=frame, anchor="nw")
+        vars_ = []
+        add_btn = [None]
+        thumb_lbls, thumb_imgs, got = {}, {}, queue.Queue()
+        blank = tk.PhotoImage(width=1, height=1)
+
+        def refresh_count(*_):
+            n = sum(v.get() for v in vars_)
+            if add_btn[0] is not None:
+                add_btn[0].config(text=tr(ok_key, n=n), state="normal" if n else "disabled")
+
+        def wheel(e):
+            canvas.yview_scroll(int(-e.delta / 120), "units")
+            return "break"
+        for e in entries:
+            v = tk.BooleanVar(value=preset is None or any(e is x for x in preset))
+            v.trace_add("write", refresh_count)
+            vars_.append(v)
+            dur = fmt_hms(e["duration"]) if e.get("duration") else ""
+            dup = self._dup_info(e.get("url"))
+            tag = f"   ·   {tr('dup_tag_queue' if dup[0] == 'queue' else 'dup_tag_hist')}" if dup else ""
+            text = fit_text(e["title"], f11, 400 - (6 * len(tag) if tag else 0)) + (f"   ·   {dur}" if dur else "") + tag
+            line = tk.Frame(frame, bg=CARD2)
+            line.pack(fill="x", padx=6, pady=1)
+            tl = tk.Label(line, image=blank, bg=CARD, bd=0, width=96, height=54)
+            tl.pack(side="left")
+            thumb_lbls[id(e)] = tl
+            cb = tk.Checkbutton(line, text=text, variable=v, bg=CARD2, fg=FG, selectcolor=CARD,
+                                activebackground=CARD2, activeforeground=FG, highlightthickness=0, bd=0,
+                                font=(FONT, 11), anchor="w", width=54)
+            cb.pack(side="left", fill="x", padx=(6, 0))
+            for w_ in (line, tl, cb):
+                w_.bind("<MouseWheel>", wheel)
+            tl.bind("<Button-1>", lambda ev, v=v: v.set(not v.get()))
+        frame.update_idletasks()
+        canvas.configure(scrollregion=(0, 0, 560, frame.winfo_reqheight()))
+
+        def show_thumbs():             # thumbnails arrive from worker threads: shown from the UI thread
+            try:
+                while True:
+                    key, img = got.get_nowait()
+                    lb = thumb_lbls.get(key)
+                    if lb is not None and lb.winfo_exists():
+                        thumb_imgs[key] = ImageTk.PhotoImage(img)
+                        lb.config(image=thumb_imgs[key], width=img.width, height=img.height)
+                        for e_ in entries:
+                            if id(e_) == key and not e_.get("thumb"):
+                                e_["thumb"] = img
+            except queue.Empty:
+                pass
+            except tk.TclError:
+                return
+            if win.winfo_exists():
+                win.after(120, show_thumbs)
+        jobs = [(id(e_), e_.get("thumb_url")) for e_ in entries if e_.get("thumb_url") and not e_.get("thumb")]
+        for e_ in entries:
+            if e_.get("thumb"):
+                got.put((id(e_), e_["thumb"]))
+        load_small_thumbs(jobs, lambda k, img: got.put((k, img)))
+        show_thumbs()
+        canvas.bind("<MouseWheel>", wheel)
+        frame.bind("<MouseWheel>", wheel)
+        if frame.winfo_reqheight() <= 340:
+            sb.pack_forget()
+
+        def set_all(val):
+            for v in vars_:
+                v.set(val)
+        RoundButton(top, tr("pl_all"), lambda: set_all(True), small=True, style="secondary").pack(side="left")
+        RoundButton(top, tr("pl_none"), lambda: set_all(False), small=True, style="secondary").pack(side="left", padx=(8, 0))
+        res = [None]
+
+        def ok():
+            res[0] = [e for e, v in zip(entries, vars_) if v.get()]
+            win.destroy()
+        row = tk.Frame(inner, bg=CARD)
+        row.pack(fill="x", pady=(14, 0))
+        add_btn[0] = RoundButton(row, "", ok, small=True, style="primary")
+        add_btn[0].pack(side="right")
+        RoundButton(row, tr("pl_cancel"), win.destroy, small=True, style="secondary").pack(side="right", padx=(0, 8))
+        refresh_count()
+        win.bind("<Escape>", lambda e: win.destroy())
+        win.update_idletasks()
+        self._center(win)
+        apply_titlebar_theme(win)
+        win.deiconify()
+        win.grab_set()
+        win.focus_force()
+        self.wait_window(win)
+        return res[0]
+
     # ------------------------------------------------------------------ queue
     def add_to_queue(self):
         c = self.current
-        if not c:
-            return False
-        if c.get("playlist"):                # every video of the playlist, same quality, no trim
+        if c and c.get("playlist"):
+            try:
+                return self._add_playlist(c)
+            except Exception as ex:
+                log("add playlist failed: " + traceback.format_exc(), "error")
+                self.alert(tr("queue_title"), f"{type(ex).__name__}: {ex}")
+                return False
+        return self._add_single(c)
+
+    def report_callback_exception(self, exc, val, tb):
+        """An error inside a button / event: written to the Logs window instead of vanishing in the console."""
+        log("UI error: " + "".join(traceback.format_exception(exc, val, tb)), "error")
+
+    def _dup_info(self, url):
+        """None, ("queue", None) or ("hist", date) when this video is already in the queue / downloaded."""
+        key = norm_url(url)
+        if not key:
+            return None
+        with self.lock:
+            if any(norm_url(it.get("url")) == key and it.get("status") != "done" for it in self.items):
+                return ("queue", None)
+        for e in load_history():
+            if e.get("url") and norm_url(e["url"]) == key and os.path.exists(e.get("path") or ""):
+                return ("hist", e.get("date") or "")
+        return None
+
+    def _add_playlist(self, c):
+        if True:
             q = self.quality_keys[self.quality.current()]
+            chosen = c.get("chosen")                     # selection made with the "choose videos" button
+            if not chosen:
+                chosen = c["entries"]
+                dups = [e for e in chosen if self._dup_info(e.get("url"))]
+                if dups and self.ask_yes_no(tr("dup_queue_title"), tr("dup_pl_msg", n=len(dups))):
+                    chosen = [e for e in chosen if e not in dups]
+                    if not chosen:
+                        return False
             color = PL_COLORS[self.pl_count % len(PL_COLORS)]   # one colour per playlist added
             self.pl_count += 1
-            for e in c["entries"]:
+            for e in chosen:
                 item = {**e, "pl_color": color, "playlist": c["title"], "name": make_name(e), "trimmed": False, "custom": False, "outdir": None,
                         "quality": q, "qualities": list(self.quality_keys), "start": None, "end": None,
                         "no_trim": True, "status": "waiting", "cancel": False}
@@ -4483,12 +5531,23 @@ class App(tk.Tk):
             self._refresh_queue()
             self.update_idletasks()
             self.canvas.yview_moveto(1.0)
+            self._load_row_thumbs([it for it in self.items if it.get("playlist") == c["title"] and not it.get("thumb")])
             return True
+
+    def _add_single(self, c):
+        if not c:
+            return False
         if not self._refresh_trim():  # impossible trim: the fields are shown in red
             return False
         start = self.start_in.seconds() if self.use_start.get() else None
         end = self.end_in.seconds() if self.use_end.get() else None
 
+        dup = self._dup_info(c.get("url"))
+        if dup:                                       # same video already in the queue / downloaded
+            msg = (tr("dup_queue_msg", name=c.get("title") or "?") if dup[0] == "queue"
+                   else tr("dup_hist_msg", name=c.get("title") or "?", date=dup[1]))
+            if not self.ask_yes_no(tr("dup_queue_title") if dup[0] == "queue" else tr("dup_title"), msg):
+                return False
         trimmed = start is not None or end is not None
         item = {**c,
                 # default file name from the template in the settings (e.g. "{title} - {channel}")
@@ -4524,19 +5583,22 @@ class App(tk.Tk):
             for _ in range(8):               # files can stay locked for a moment on Windows
                 left = False
                 targets = {p for p in made if os.path.exists(p)}
-                try:
-                    names = os.listdir(outdir) if outdir else []
-                except OSError:
-                    names = []
-                for f in names:
-                    if f not in before and any(f.startswith(px) for px in prefixes):
-                        targets.add(os.path.join(outdir, f))
+                for d in (work_dirs(outdir) if outdir else []):
+                    try:
+                        names = os.listdir(d)
+                    except OSError:
+                        names = []
+                    for f in names:
+                        if (d != outdir or f not in before) and any(f.startswith(px) for px in prefixes):
+                            targets.add(os.path.join(d, f))
                 for p in targets:
                     try:
                         os.remove(p)
                     except OSError:
                         left = True
                 if not left:
+                    if outdir:
+                        drop_tmp_dir(outdir)
                     return
                 time.sleep(0.5)
         threading.Thread(target=work, daemon=True).start()
@@ -4717,6 +5779,158 @@ class App(tk.Tk):
         else:
             self.dlq_btn.config(text=tr("dl_queue"), command=self.start_queue, style="primary")
 
+    # ------------------------------------------------- queue options: start time / action when finished
+    def _qopts_refresh(self):
+        parts = []
+        if self.sched_at:
+            parts.append(tr("q_sched_at", t=f"{self.sched_at[0]:02d}:{self.sched_at[1]:02d}"))
+        if self.after_action != "none":
+            parts.append(tr("q_label_" + self.after_action))
+        self.qopts_lbl.config(text="  ·  ".join(parts))
+
+    def queue_options(self):
+        win = tk.Toplevel(self)
+        win.withdraw()                      # hidden until centered: no flash in the corner
+        win.title(tr("q_opts"))
+        win.configure(bg=BG)
+        win.resizable(False, False)
+        win.transient(self)
+        box = card(win)
+        box.pack(padx=20, pady=20)
+        inner = tk.Frame(box, bg=CARD)
+        inner.pack(padx=26, pady=22)
+        use = tk.BooleanVar(value=bool(self.sched_at))
+        hh = tk.StringVar(value=f"{(self.sched_at or (3, 0))[0]:02d}")
+        mm = tk.StringVar(value=f"{(self.sched_at or (3, 0))[1]:02d}")
+        row = tk.Frame(inner, bg=CARD)
+        row.pack(anchor="w")
+        cb = tk.Checkbutton(row, text=tr("q_sched"), variable=use, bg=CARD, fg=FG, selectcolor=CARD2,
+                            activebackground=CARD, activeforeground=FG, highlightthickness=0, bd=0, font=(FONT, 11))
+        cb.pack(side="left")
+        for var, rng in ((hh, range(24)), (mm, range(0, 60, 5))):
+            if var is mm:
+                lbl(row, ":", 11, FG).pack(side="left", padx=4)
+            c_ = ttk.Combobox(row, textvariable=var, values=[f"{v:02d}" for v in rng], width=3, state="readonly",
+                              font=(FONT, 11))
+            c_.pack(side="left", padx=(8 if var is hh else 0, 0))
+        action = tk.StringVar(value=self.after_action)
+        if sys.platform.startswith("win"):
+            lbl(inner, tr("q_after"), 11, MUTED, bold=True).pack(anchor="w", pady=(20, 8))
+            arow = tk.Frame(inner, bg=CARD)
+            arow.pack(anchor="w")
+            btns = {}
+
+            def pick(v):
+                action.set(v)
+                for k, b in btns.items():
+                    b.config(style="primary" if k == v else "secondary")
+            for k in ("none", "sleep", "shutdown"):
+                btns[k] = RoundButton(arow, tr("q_after_" + k), lambda k=k: pick(k), small=True,
+                                      style="primary" if k == self.after_action else "secondary")
+                btns[k].pack(side="left", padx=(0, 8))
+
+        def save():
+            self.sched_at = (int(hh.get()), int(mm.get())) if use.get() else None
+            self.after_action = action.get() if sys.platform.startswith("win") else "none"
+            self._set_schedule()
+            win.destroy()
+        brow = tk.Frame(inner, bg=CARD)
+        brow.pack(fill="x", pady=(22, 0))
+        RoundButton(brow, tr("q_save"), save, small=True, style="primary").pack(side="right")
+        RoundButton(brow, tr("q_cancel"), win.destroy, small=True, style="secondary").pack(side="right", padx=(0, 8))
+        win.bind("<Escape>", lambda e: win.destroy())
+        win.update_idletasks()
+        self._center(win)
+        apply_titlebar_theme(win)
+        win.deiconify()
+        win.grab_set()
+        win.focus_force()
+
+    def _set_schedule(self):
+        """Next occurrence of the chosen time (today if still ahead, else tomorrow); checked every 20 s."""
+        import datetime as dt
+        if self.sched_at:
+            now = dt.datetime.now()
+            t = now.replace(hour=self.sched_at[0], minute=self.sched_at[1], second=0, microsecond=0)
+            if t <= now:
+                t += dt.timedelta(days=1)
+            first = self._sched_target is None
+            self._sched_target = t
+            log(f"queue scheduled for {t:%Y-%m-%d %H:%M}")
+            if first:
+                self.after(20000, self._sched_tick)
+        else:
+            self._sched_target = None
+        self._qopts_refresh()
+
+    def _sched_tick(self):
+        import datetime as dt
+        if self._sched_target is None:
+            return
+        if dt.datetime.now() >= self._sched_target:
+            self._sched_target = None
+            self.sched_at = None
+            self._qopts_refresh()
+            with self.lock:
+                waiting = any(it["status"] in ("waiting", "error", "cancelled") for it in self.items)
+            log("scheduled start reached")
+            if waiting and not self.running:
+                self.start_queue()
+            return
+        self.after(20000, self._sched_tick)
+
+    def _power_countdown(self, action):
+        """60 s warning before sleep / shutdown, cancellable."""
+        win = tk.Toplevel(self)
+        win.title(tr("q_count_title"))
+        win.configure(bg=BG)
+        win.resizable(False, False)
+        win.transient(self)
+        box = card(win)
+        box.pack(padx=20, pady=20)
+        inner = tk.Frame(box, bg=CARD)
+        inner.pack(padx=26, pady=22)
+        msg = lbl(inner, "", 12, FG, justify="left")
+        msg.pack(anchor="w")
+        left = [60]
+        state = {"job": None}
+
+        def cancel():
+            if state["job"]:
+                win.after_cancel(state["job"])
+            self.after_action = "none"
+            self._qopts_refresh()
+            win.destroy()
+
+        def tick():
+            msg.config(text=tr("q_count_" + action, n=left[0]))
+            if left[0] <= 0:
+                self.after_action = "none"
+                self._qopts_refresh()
+                win.destroy()
+                self.save_queue()
+                flags = 0x08000000
+                try:
+                    if action == "shutdown":
+                        subprocess.Popen(["shutdown", "/s", "/t", "5"], creationflags=flags)
+                    else:
+                        subprocess.Popen(["rundll32.exe", "powrprof.dll,SetSuspendState", "0", "1", "0"], creationflags=flags)
+                except Exception:
+                    log("power action failed: " + traceback.format_exc(), "error")
+                return
+            left[0] -= 1
+            state["job"] = win.after(1000, tick)
+        RoundButton(inner, tr("q_cancel"), cancel, small=True, style="primary").pack(anchor="e", pady=(18, 0))
+        win.protocol("WM_DELETE_WINDOW", cancel)
+        win.bind("<Escape>", lambda e: cancel())
+        win.update_idletasks()
+        self._center(win)
+        apply_titlebar_theme(win)
+        win.lift()
+        tick()
+        if NOTIFY_SOUND:
+            play_chime()
+
     def download_now(self):
         if self.add_to_queue():
             self.start_queue()
@@ -4776,8 +5990,29 @@ class App(tk.Tk):
         """Runs one download (status is already 'running') and reports the outcome."""
         self.events.put(("start", it))
         it["thread"] = threading.get_ident()
+        attempt = 0
+        while True:
+            try:
+                it["filepath"] = self._download(it, it["outdir"] or default_dir)
+                break
+            except (Exception, ForceStop) as e:
+                attempt += 1
+                if not self._should_retry(it, e, attempt):
+                    if it.get("detached"):               # the stop watchdog already finished this line
+                        log("download thread ended after force-stop (ignored)", "debug")
+                        return
+                    self._conclude(it, e)
+                    return
+                log(f"network error, new attempt {attempt}/{AUTO_RETRY} in {5 * attempt} s: {clean(str(e))[:200]}", "warning")
+                self.events.put(("status", it, "retry"))
+                for _ in range(5 * attempt):             # wait, but a stop is still taken into account
+                    if it["cancel"] or self.stop_requested:
+                        break
+                    time.sleep(1)
+                if it["cancel"] or self.stop_requested:
+                    self._conclude(it, Cancelled())
+                    return
         try:
-            it["filepath"] = self._download(it, it["outdir"] or default_dir)
             if it.get("detached"):
                 return
             if COMPAT_EDIT and it["quality"] != "mp3" and not it.get("is_live") and it["filepath"]:
@@ -4791,6 +6026,18 @@ class App(tk.Tk):
                 log("download thread ended after force-stop (ignored)", "debug")
                 return
             self._conclude(it, e)
+
+    NET_WORDS = ("timed out", "timeout", "connection", "temporary failure", "getaddrinfo", "network", "http error 5",
+                 "incompleteread", "ssl", "reset by peer", "remote end closed", "eof occurred")
+
+    def _should_retry(self, it, e, attempt):
+        """Network errors only (never a stop, a declined duplicate or a bad link), up to AUTO_RETRY times."""
+        if attempt > AUTO_RETRY or it.get("is_live") or it["cancel"] or self.stop_requested or it.get("detached"):
+            return False
+        if isinstance(e, (Cancelled, ForceStop, Declined)):
+            return False
+        msg = clean(str(e)).lower()
+        return any(w in msg for w in self.NET_WORDS)
 
     def _conclude(self, it, e):
         """Outcome of a download that raised (stop / pause / error)."""
@@ -4827,10 +6074,10 @@ class App(tk.Tk):
         ff = shutil.which("ffmpeg")
         found = {p for p in (it.get("made") or ()) if p.endswith(".part")}
         outdir, prefixes, before = it.get("partial") or (None, set(), set())
-        if outdir and os.path.isdir(outdir):                # also look for what yt-dlp left in the folder
-            for f in os.listdir(outdir):
-                if f.endswith(".part") and f not in before and any(f.startswith(px) for px in prefixes):
-                    found.add(os.path.join(outdir, f))
+        for d in (work_dirs(outdir) if outdir else []):     # also look for what yt-dlp left in the folders
+            for f in os.listdir(d):
+                if f.endswith(".part") and (d != outdir or f not in before) and any(f.startswith(px) for px in prefixes):
+                    found.add(os.path.join(d, f))
         parts = sorted(p for p in found if os.path.exists(p) and os.path.getsize(p) > 0)
         log(f"finalize live: ffmpeg={ff}, parts={parts}")
         if not ff or not parts:
@@ -4864,6 +6111,8 @@ class App(tk.Tk):
                                 os.remove(os.path.join(folder, f))
                             except OSError:
                                 pass
+                if outdir:
+                    drop_tmp_dir(outdir)
                 return out
             log(f"ffmpeg -> {out}: code {run.returncode}\n{run.stderr or ''}", "info" if run.returncode == 0 else "error")
             err = (run.stderr or "").strip().splitlines()[-1] if run.stderr else "ffmpeg"
@@ -4873,8 +6122,101 @@ class App(tk.Tk):
                 pass
         raise RuntimeError(err)
 
+    def _slow_watch(self, d, fn, st, now):
+        """YouTube lets a connection run fast for a while, then throttles it (a few hundred KB/s) while a new
+        connection is fast again. When the speed over the last 6 s collapses, the download is cut and resumed
+        on a fresh connection (the .part file is kept). With a speed limit it only acts when the limiter itself was not the one slowing the download."""
+        if self.stop_requested or st["no_more"] or d.get("_live"):
+            return
+        att = st["att"]
+        done = d.get("downloaded_bytes") or 0
+        total = d.get("total_bytes") or d.get("total_bytes_estimate") or 0
+        if not total:                                   # unknown size (live, streams): never cut
+            return
+        if att["fn"] != fn:
+            att.update(fn=fn, win=[], best=0.0)
+        win = att["win"]
+        win.append((now, done, st["slept"]))
+        while len(win) > 1 and now - win[1][0] >= 6:
+            win.pop(0)
+        span = now - win[0][0]
+        if span < 6 or now - att["t0"] < 7:
+            return
+        if st["slept"] - win[0][2] > 0.1 * span:        # our own speed limiter was holding the download back
+            return
+        cur = (done - win[0][1]) / span / 1048576
+        att["best"] = max(att["best"], cur)
+        best = att["best"]
+        slow = cur < 1.0 if best < 8 else cur < min(0.15 * best, 5.0)
+        if not slow or (total and total - done < 3 * 1048576):
+            return
+        if st["prev_best"] is not None and st["prev_best"] < 3:
+            st["noimp"] += 1                      # the last reconnection did not help either
+        else:
+            st["noimp"] = 0
+        if st["noimp"] >= 2 or st["restarts"] >= 40:
+            st["no_more"] = True
+            log(f"slow connection persists after {st['restarts']} reconnection(s): keeping the current one", "warning")
+            return
+        st["restarts"] += 1
+        st["prev_best"] = best
+        log(f"speed dropped to {cur:.2f} MB/s (best {best:.1f} MB/s) at {done / 1048576:.0f}/{total / 1048576:.0f} MB: "
+            f"reconnecting and resuming (#{st['restarts']})", "warning")
+        raise SlowRestart()
+
     def _download(self, it, outdir):
         files = []
+        lim = {"fn": None, "t0": 0.0, "b0": 0}
+        st = {"t_start": time.monotonic(), "slept": 0.0, "seen": set(), "pp": {}, "pp_total": 0.0,
+              "bytes": 0, "dl_time": 0.0, "last_limit": SPEED_LIMIT, "peak": 0.0,
+              "att": {"t0": time.monotonic(), "win": [], "best": 0.0, "fn": None},
+              "restarts": 0, "noimp": 0, "no_more": False, "prev_best": None}
+
+        def throttle(d):
+            """Own speed limit: yt-dlp's built-in one undershoots badly with YouTube's chunked downloads
+            (20 MB/s asked, 2-3 obtained). The average speed of each file is kept at the limit by pausing here."""
+            if it.get("is_live"):                         # a live recording must keep up with real time
+                return
+            limit = SPEED_LIMIT * 1048576                 # read live: a change in the settings applies at once
+            done = d.get("downloaded_bytes") or 0
+            now = time.monotonic()
+            if d.get("filename") != lim["fn"]:            # new file (video, then audio): new reference
+                lim.update(fn=d.get("filename"), t0=now, b0=done, lm=limit)
+            if lim.get("lm") != limit:                    # limit changed: the average restarts from this moment
+                lim.update(t0=now, b0=done, lm=limit)     # (else a lower limit froze the download to "catch up")
+            if limit <= 0:
+                lim.update(t0=now, b0=done)               # unlimited: nothing to catch up on later
+                return
+            need = (done - lim["b0"]) / limit             # seconds this amount of data should take
+            elapsed = now - lim["t0"]
+            if elapsed > need + 1:                        # slower than the limit for a while: no big burst afterwards
+                lim["t0"] = now - need - 1
+                return
+            end = now + max(need - elapsed, 0)
+            t_sl = time.monotonic()
+            while time.monotonic() < end and not it["cancel"] and SPEED_LIMIT * 1048576 == limit:   # a new limit ends the wait
+                time.sleep(min(0.2, max(end - time.monotonic(), 0)))
+            st["slept"] += time.monotonic() - t_sl
+
+        sp = {"fn": None, "w": []}
+
+        def shown_speed(d):
+            """Speed shown in the queue: average over the last 5 s of what really arrived (yt-dlp's own value
+            jumps between the pauses of the speed limiter and could show more than the limit)."""
+            done = d.get("downloaded_bytes")
+            if done is None:
+                return d.get("speed")
+            now = time.monotonic()
+            if d.get("filename") != sp["fn"]:
+                sp["fn"], sp["w"] = d.get("filename"), []
+            w = sp["w"]
+            w.append((now, done))
+            while len(w) > 2 and now - w[1][0] >= 5:
+                w.pop(0)
+            span = now - w[0][0]
+            if span < 1.0:
+                return d.get("speed")
+            return max(done - w[0][1], 0) / span
 
         def hook(d):
             # remember every file yt-dlp writes (+ its .part / .ytdl) so a removed line can clean up
@@ -4886,10 +6228,50 @@ class App(tk.Tk):
                     made.update((p, p + ".part", p + ".ytdl"))
             if it["cancel"] and not (it.get("finish") and d["status"] == "finished"):
                 raise Cancelled()
+            fn_ = d.get("filename")
+            if d["status"] == "finished":
+                size = d.get("total_bytes") or d.get("downloaded_bytes") or 0
+                el = d.get("elapsed") or 0
+                mb = size / 1048576
+                avg = mb / el if el > 0 else 0.0
+                st["bytes"] += size
+                st["dl_time"] += el
+                if el > 0.5 and mb > 1:
+                    RECENT_DL.append((avg, mb))
+                    del RECENT_DL[:-20]
+                log(f"file done: {os.path.basename(fn_ or '')} | {mb:.1f} MB in {el:.1f} s = {avg:.2f} MB/s average "
+                    f"(peak {st['peak']:.2f} MB/s, paused by the limiter {st['slept']:.1f} s, limit now {SPEED_LIMIT:g} MB/s)")
+                ra = recent_avg()
+                if ra:
+                    log(ra)
             if d["status"] == "downloading":
+                if fn_ not in st["seen"]:
+                    st["seen"].add(fn_)
+                    inf = d.get("info_dict") or {}
+                    log(f"file start: {os.path.basename(fn_ or '')} | format_id={inf.get('format_id')} "
+                        f"vcodec={inf.get('vcodec')} acodec={inf.get('acodec')} ext={inf.get('ext')} "
+                        f"proto={inf.get('protocol')} res={inf.get('resolution') or inf.get('height')} "
+                        f"tbr={inf.get('tbr')} total={((d.get('total_bytes') or d.get('total_bytes_estimate') or 0) / 1048576):.1f} MB "
+                        f"fragments={d.get('fragment_count')} | limit={SPEED_LIMIT:g} MB/s")
+                if d.get("speed"):
+                    st["peak"] = max(st["peak"], d["speed"] / 1048576)
+                now_ = time.monotonic()
+                if now_ - st.get("sample_t", 0) >= 5:         # speed profile of the download, one line / 5 s
+                    st["sample_t"] = now_
+                    log(f"speed sample: {os.path.basename(fn_ or '')[-18:]} {(d.get('downloaded_bytes') or 0) / 1048576:.1f}"
+                        f"/{((d.get('total_bytes') or d.get('total_bytes_estimate') or 0) / 1048576):.1f} MB, "
+                        f"{(d.get('speed') or 0) / 1048576:.2f} MB/s now, limit {SPEED_LIMIT:g}")
+                if not it.get("is_live"):
+                    self._slow_watch(d, fn_, st, now_)
+                if SPEED_LIMIT != st["last_limit"]:
+                    log(f"speed limit seen by the running download: {st['last_limit']:g} -> {SPEED_LIMIT:g} MB/s "
+                        f"(at {(d.get('downloaded_bytes') or 0) / 1048576:.1f} MB, current speed "
+                        f"{(d.get('speed') or 0) / 1048576:.2f} MB/s)")
+                    st["last_limit"] = SPEED_LIMIT
+                throttle(d)
                 total = d.get("total_bytes") or d.get("total_bytes_estimate") or 0
                 if it.get("is_live") or not total:
-                    self.events.put(("rec", it, d.get("downloaded_bytes") or 0, d.get("speed")))
+                    self.events.put(("rec", it, d.get("downloaded_bytes") or 0, shown_speed(d)))
                     return
                 frac = d.get("downloaded_bytes", 0) / total if total else 0
             elif d["status"] == "finished":
@@ -4907,7 +6289,7 @@ class App(tk.Tk):
                 pct = min(100.0, (sum(sizes[:idx]) + frac * sizes[idx]) / sum(sizes) * 100)
             else:
                 pct = min(100.0, (idx + frac) / n * 100)
-            self.events.put(("progress", it, pct, d.get("speed")))
+            self.events.put(("progress", it, pct, shown_speed(d) if d["status"] == "downloading" else d.get("speed")))
 
         conv_stop = threading.Event()
 
@@ -4921,11 +6303,18 @@ class App(tk.Tk):
                         raise Cancelled()
                     it["phase"] = "pp"
                 name = d.get("postprocessor") or ""
-                log(f"post-processing: {name}")
+                st["pp"][name] = time.monotonic()
+                log(f"post-processing: {name} started (+{time.monotonic() - st['t_start']:.1f} s since start)")
                 key = {"Merger": "merging", "FFmpegExtractAudio": "audio_conv"}.get(name, "converting")
                 self.events.put(("status", it, key))
                 watch_conversion(self, it, outdir, name, key, d.get("info_dict") or {}, conv_stop)
             elif d["status"] == "finished":
+                nm = d.get("postprocessor") or ""
+                t0_ = st["pp"].pop(nm, None)
+                if t0_ is not None:
+                    dt = time.monotonic() - t0_
+                    st["pp_total"] += dt
+                    log(f"post-processing: {nm} finished in {dt:.1f} s")
                 conv_stop.set()
 
         os.makedirs(outdir, exist_ok=True)
@@ -4946,14 +6335,15 @@ class App(tk.Tk):
                 log(f"already downloaded, new copy: {name}")
             it["dup_name"] = name
         opts = {
-            "outtmpl": os.path.join(outdir.replace("%", "%%"), name + ".%(ext)s"),
+            "outtmpl": name + ".%(ext)s",
+            "paths": {"home": outdir, "temp": make_tmp_dir(outdir, video_key(it["url"]))},   # work files go to a hidden sub-folder
             "noplaylist": True,
             "quiet": True,
             "verbose": True,
             "logger": QuietLogger(lambda m: it.get("is_live") and m.startswith("[download] Destination:")
                                   and self.events.put(("rec_live", it))),
             "concurrent_fragment_downloads": 4,
-            "ratelimit": int(SPEED_LIMIT * 1048576) or None,  # bytes / second, None = unlimited
+            "ratelimit": None,                                # the limit is applied in the progress hook (throttle)  # bytes / second, None = unlimited
             "progress_hooks": [hook],
             "postprocessor_hooks": [pp_hook],
         }
@@ -4973,8 +6363,10 @@ class App(tk.Tk):
                 h = int(q[:-1])
                 opts["format"] = f"bv*[height<={h}]+ba/b[height<={h}]"
             opts["merge_output_format"] = "mp4"
-            if COMPAT_EDIT:                   # same resolution, but H.264 / AAC first when it exists
+            if VIDEO_CODEC == "h264":         # same resolution, but H.264 / AAC first when it exists
                 opts["format_sort"] = ["res", "vcodec:h264", "acodec:aac"]
+            elif VIDEO_CODEC in ("vp9", "av1"):
+                opts["format_sort"] = ["res", f"vcodec:{VIDEO_CODEC}"]
 
         if it["start"] is not None or it["end"] is not None:
             end = it["end"] if it["end"] is not None else float("inf")
@@ -4999,14 +6391,54 @@ class App(tk.Tk):
             # ffmpeg's HLS default starts ~3 segments (~10 s) in the past: start at the newest one
             opts["external_downloader_args"] = {"ffmpeg_i": ["-live_start_index", "-1"]}
         log(f"download start: {it['url']} (quality={it['quality']}, live={bool(it.get('is_live'))}, "
-            f"from_start={bool(it.get('live_from_start'))}) -> {it['final_base']}")
+            f"from_start={bool(it.get('live_from_start'))}, limit={SPEED_LIMIT:g} MB/s) -> {it['final_base']}")
         it["in_dl"] = True
         it["phase"] = "dl"
+        def run_once():
+            try:                                  # cookies cost seconds: only used when the video needs them
+                with yt_dlp.YoutubeDL(opts) as ydl:
+                    info = ydl.extract_info(it["url"], download=True)
+            except Exception as ex:
+                if it["cancel"] or not needs_login(ex):
+                    raise
+                if not cookies_available():
+                    raise RuntimeError(cookie_hint(clean(str(ex)))) from ex
+                log("login needed: retrying with the browser cookies", "info")
+                opts.update(js_runtime_opts())
+                with yt_dlp.YoutubeDL(opts) as ydl:
+                    apply_cookies(ydl)
+                    try:
+                        info = ydl.extract_info(it["url"], download=True)
+                    except Exception as ex2:
+                        if needs_login(ex2) and not it["cancel"]:
+                            raise RuntimeError(cookie_hint(clean(str(ex2)))) from ex2
+                        raise
+            return info
         try:
-            with yt_dlp.YoutubeDL(opts) as ydl:
-                info = ydl.extract_info(it["url"], download=True)
+            while True:                           # a throttled connection is dropped and the file resumed
+                st["att"] = {"t0": time.monotonic(), "win": [], "best": 0.0, "fn": None}
+                try:
+                    info = run_once()
+                    break
+                except SlowRestart:
+                    if it["cancel"]:
+                        raise Cancelled()
+                    continue
         finally:
             it["in_dl"] = False
+            drop_tmp_dir(outdir, video_key(it["url"]))   # only removed when empty: a paused download keeps its files
+        total_t = time.monotonic() - st["t_start"]
+        try:
+            ver = yt_dlp.version.__version__
+        except Exception:
+            ver = "?"
+        log(f"download summary: total {total_t:.1f} s | network {st['dl_time']:.1f} s for {st['bytes'] / 1048576:.1f} MB "
+            f"({(st['bytes'] / 1048576 / st['dl_time']) if st['dl_time'] > 0 else 0:.2f} MB/s) | "
+            f"post-processing {st['pp_total']:.1f} s | limiter pauses {st['slept']:.1f} s | "
+            f"other (extraction, waiting, cleanup) {max(total_t - st['dl_time'] - st['pp_total'], 0):.1f} s | "
+            f"limit={SPEED_LIMIT:g} MB/s | fragments in parallel={opts['concurrent_fragment_downloads']} | "
+            f"temp dir={opts['paths']['temp']} | yt-dlp {ver} | python {sys.version.split()[0]} | "
+            f"ffmpeg={'yes' if shutil.which('ffmpeg') else 'no'}")
         reqs = (info or {}).get("requested_downloads") or []
         return reqs[0].get("filepath") if reqs else None
 
@@ -5022,6 +6454,7 @@ class App(tk.Tk):
                                     "-of", "default=nw=1:nk=1", path], capture_output=True, text=True,
                                    creationflags=flags, timeout=60)
                 return r.stdout.strip().split("\n")[0] if r.stdout.strip() else ""
+            t_probe = time.monotonic()
             vc, ac = probe("v:0", "codec_name"), probe("a:0", "codec_name")
             dur = subprocess.run([fp, "-v", "error", "-show_entries", "format=duration", "-of",
                                   "default=nw=1:nk=1", path], capture_output=True, text=True,
@@ -5030,7 +6463,8 @@ class App(tk.Tk):
         except Exception:
             log("compat probe failed: " + traceback.format_exc(), "warning")
             return path
-        log(f"compat check: video={vc}, audio={ac}")
+        log(f"compat check: video={vc}, audio={ac} (probe {time.monotonic() - t_probe:.1f} s, "
+            f"COMPAT_EDIT={COMPAT_EDIT}, file {os.path.getsize(path) / 1048576:.1f} MB)")
         need_v, need_a = vc not in ("h264", ""), ac not in ("aac", "")
         if not (need_v or need_a):
             return path
@@ -5042,6 +6476,7 @@ class App(tk.Tk):
         cmd += (["-c:a", "aac", "-b:a", "192k"] if need_a else ["-c:a", "copy"])
         cmd += ["-movflags", "+faststart", out]
         log("re-encode: " + " ".join(cmd))
+        t_enc = time.monotonic()
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, creationflags=flags)
         try:
             for line in proc.stdout:
@@ -5056,6 +6491,7 @@ class App(tk.Tk):
         except Exception:
             proc.kill()
             raise
+        log(f"re-encode took {time.monotonic() - t_enc:.1f} s (exit {proc.returncode})")
         if proc.returncode != 0 or not os.path.exists(out):
             log("re-encode failed: " + err[-600:], "error")
             if os.path.exists(out):
@@ -5090,6 +6526,8 @@ class App(tk.Tk):
         if kind == "external":
             log(f"link received: {ev[1] or '(show window)'}")
             self._open_external(ev[1])
+            if len(ev) > 2:
+                ev[2].set()
             return
         if kind == "tray_show":
             self._from_tray()
@@ -5114,9 +6552,37 @@ class App(tk.Tk):
                 self.alert(tr("thumb_title"), ev[1])
         elif kind == "info":
             self._show_info(ev[1], ev[2], ev[3])
+        elif kind == "cookie_test":
+            try:
+                self._ck_status[ev[1]] = bool(ev[2] and ev[3] > 0)
+                for v_, b_ in self._ck_btns.items():
+                    if b_.winfo_exists():
+                        b_.config(style=self._ck_style(v_, COOKIES_BROWSER))
+            except (tk.TclError, AttributeError):
+                pass
+            if ev[1] == COOKIES_BROWSER:
+                try:
+                    if ev[2] and ev[3] > 0:
+                        self._ck_show("✔ " + tr("ck_ok", n=ev[3], y=ev[4]), GREEN)
+                    elif ev[2]:
+                        self._ck_show("⚠ " + tr("ck_noyt", n=ev[3]), ORANGE)
+                    else:
+                        err = ev[5]
+                        if "DPAPI" in err:       # Chromium browsers lock their cookies: nothing the app can change
+                            self._ck_show("✖ " + tr("ck_dpapi"), RED)
+                        else:
+                            m_ = re.search(r"https?://[^\s)]+", err)
+                            err = re.sub(r"\s*See\s+https?://\S+\s+for more info\.?", "", err)
+                            err = re.sub(r"https?://\S+", "", err).strip(" .")
+                            self._ck_show("✖ " + tr("ck_fail", e=err), RED, m_.group(0) if m_ else "")
+                except (tk.TclError, AttributeError):
+                    pass
         elif kind == "app_update":
             log(f"app update available: {ev[1]}")
             self.info_btn.config(style="primary")        # the Info button lights up
+            if self.state() != "withdrawn" and not getattr(self, "_upd_prompted", False):
+                self._upd_prompted = True                # asked once per launch
+                self._update_prompt(ev[1])
         elif kind == "install_check":
             self._show_install(ev[1], ev[2], ev[3] if len(ev) > 3 else None)
         elif kind == "update_done":
@@ -5131,6 +6597,11 @@ class App(tk.Tk):
                 if not ev[2] and not self.url_err_on and NOTIFY_SOUND:
                     play_error()                      # the red message just appeared (paste / typing)
                 self._set_url_error(not ev[2])
+        elif kind == "row_thumb":
+            row = ev[1].get("row")
+            if row is not None and any(x is ev[1] for x in self.items):
+                ev[1]["thumb"] = ev[2]
+                row.set_thumb(ev[2])
         elif kind == "playlist":
             self._show_playlist(ev[1], ev[2], ev[3])
         elif kind == "fetch_error":
@@ -5168,6 +6639,10 @@ class App(tk.Tk):
             ev[1]["row"].set_state(ev[2])
         elif kind == "done":
             log(f"done: {ev[1].get('name')}")
+            try:
+                add_history(ev[1])
+            except Exception:
+                log("history save failed: " + traceback.format_exc(), "warning")
             if NOTIFY_SOUND:
                 play_chime()
             if NOTIFY_TOAST:
@@ -5187,7 +6662,12 @@ class App(tk.Tk):
         elif kind == "idle":
             self.after(1500, trim_memory)
             self.running = False
+            was_stopped = self.stop_requested
             self.stop_requested = False
+            with self.lock:
+                still = any(it["status"] in ("waiting", "running") for it in self.items)
+            if self.after_action != "none" and not was_stopped and not still and not self.restart_requested:
+                self._power_countdown(self.after_action)
             self._update_stop_btn()
             if self.restart_requested:
                 self.restart_requested = False
@@ -5199,6 +6679,7 @@ if __name__ == "__main__":
     if send_to_running(_link or "show"):                         # already open: bring it back (+ hand the link over)
         sys.exit(0)
     _hide_console()
+    init_log_file()
 
     def _warm_up():                                  # yt-dlp loads while the window appears
         _load_ytdlp()

@@ -35,7 +35,7 @@ python yt_downloader.py
 
 ### Créer l'exécutable soi-même
 
-Installeur : installe [Inno Setup 6](https://jrsoftware.org/isdl.php) puis double-clique sur `build_installer.bat` (crée `dist\Another-Video-Downloader-Installer.exe`). Version portable : `build_portable.bat` (crée `dist\Another-Video-Downloader-Portable.exe`). Dans les deux cas, PyInstaller est installé et ffmpeg téléchargé si besoin.
+Installeur : installe [Inno Setup 6](https://jrsoftware.org/isdl.php) puis double-clique sur `build_installer.bat` (crée `dist\Another-Video-Downloader-Installer.exe`). Version portable : `build_portable.bat` (crée `dist\Another-Video-Downloader-Portable.exe`). Dans les deux cas, PyInstaller est installé et ffmpeg et Deno (nécessaire à YouTube pour la vitesse) téléchargés si besoin.
 
 ## Données
 
@@ -81,7 +81,7 @@ winget install ffmpeg        # if ffmpeg is not installed yet
 python yt_downloader.py
 ```
 
-**Build it yourself:** installer: install [Inno Setup 6](https://jrsoftware.org/isdl.php), then double-click `build_installer.bat` (creates `dist\Another-Video-Downloader-Installer.exe`). Portable: `build_portable.bat` (creates `dist\Another-Video-Downloader-Portable.exe`). Both install PyInstaller and download ffmpeg if needed.
+**Build it yourself:** installer: install [Inno Setup 6](https://jrsoftware.org/isdl.php), then double-click `build_installer.bat` (creates `dist\Another-Video-Downloader-Installer.exe`). Portable: `build_portable.bat` (creates `dist\Another-Video-Downloader-Portable.exe`). Both install PyInstaller and download ffmpeg and Deno (needed by YouTube for full speed) if needed.
 
 ### Data
 

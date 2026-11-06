@@ -10,3 +10,5 @@ ffmpeg_dl*
 *.zip
 .vscode/
 .idea/
+deno.exe
+deno_dl*
