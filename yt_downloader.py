@@ -1318,7 +1318,7 @@ def latest_ffmpeg():
 FFMPEG_ZIP = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.2.0"
 APP_REPO = "leclodo/Another-Video-Downloader"
 APP_RELEASES_URL = f"https://github.com/{APP_REPO}/releases"
 
