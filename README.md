@@ -1,5 +1,8 @@
 # Another Video Downloader
 
+<img width="1082" height="596" alt="image" src="https://github.com/user-attachments/assets/b280e8ff-021a-49e6-b5fb-beb94eb31211" />
+
+
 **FR** · [English below](#english)
 
 Une interface graphique simple pour [yt-dlp](https://github.com/yt-dlp/yt-dlp) : colle un lien, choisis la qualité, télécharge. Pour Windows (Python + Tkinter), libre et open source.
