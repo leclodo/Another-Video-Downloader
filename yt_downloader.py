@@ -26,7 +26,8 @@ import tkinter.font as tkfont
 import traceback
 import webbrowser
 from tkinter import filedialog, messagebox, ttk
-from urllib.parse import parse_qs, urlparse
+from concurrent.futures import ThreadPoolExecutor, wait as futures_wait, FIRST_COMPLETED
+from urllib.parse import parse_qs, urljoin, urlparse
 from urllib.request import Request, urlopen
 
 # Windowed builds (.pyw / PyInstaller --windowed) have no stdout/stderr: give libraries a sink.
@@ -400,6 +401,9 @@ T = {
                        "quand YouTube le propose ; sinon (1440p, 4K…) la vidéo est ré-encodée automatiquement après le téléchargement (plus long).",
         "set_live": "Directs en cours (lives)",
         "live_now": "À partir de maintenant", "live_start": "Depuis le début",
+        "set_trimmode": "Découpe (trim)", "trim_exact": "Précise", "trim_fast": "Rapide",
+        "trimmode_hint": "Précise : la partie choisie est réencodée, découpe à l'image près mais plus lent. "
+                         "Rapide : coupe à l'image clé la plus proche sans réencoder (quelques secondes de décalage possibles).",
         "live_hint": "« Depuis le début » récupère le direct depuis son commencement quand YouTube le permet "
                      "(expérimental, plus lourd au démarrage).",
         "live_tag": "● DIRECT",
@@ -506,6 +510,7 @@ T = {
         "tip_trim": "Avec une découpe, le téléchargement peut prendre beaucoup plus de temps : "
                     "la partie choisie est recoupée et réencodée par ffmpeg.",
         "info_btn": "Infos",
+        "tip_res": "Ressources utilisées par l'appli (et ffmpeg / deno qu'elle lance)",
         "info_title": "Infos",
         "info_ytdlp_body": "Cette interface est un habillage de yt-dlp : yt-dlp doit être "
                            "installé pour qu'elle fonctionne.",
@@ -610,6 +615,9 @@ T = {
                        "when YouTube offers it; otherwise (1440p, 4K…) the video is re-encoded automatically after the download (slower).",
         "set_live": "Live streams",
         "live_now": "From now on", "live_start": "From the start",
+        "set_trimmode": "Trim", "trim_exact": "Exact", "trim_fast": "Fast",
+        "trimmode_hint": "Exact: the chosen part is re-encoded, frame-accurate but slower. "
+                         "Fast: cuts at the nearest keyframe without re-encoding (a few seconds of offset possible).",
         "live_hint": "\"From the start\" fetches the stream from its beginning when YouTube allows it "
                      "(experimental, heavier at startup).",
         "live_tag": "● LIVE",
@@ -716,6 +724,7 @@ T = {
         "tip_trim": "Trimming can make the download take much longer: "
                     "the selected part is cut and re-encoded by ffmpeg.",
         "info_btn": "Info",
+        "tip_res": "Resources used by the app (and the ffmpeg / deno it starts)",
         "info_title": "Info",
         "info_ytdlp_body": "This interface is a front-end for yt-dlp: yt-dlp must be "
                            "installed for it to work.",
@@ -826,6 +835,7 @@ VIDEO_CODEC = "h264"                 # h264 (editing-friendly) / best / vp9 / av
 AUTO_RETRY = 2                       # attempts after a network error
 COOKIES_BROWSER = ""                 # browser whose cookies yt-dlp uses ("" = none)
 COMPAT_EDIT = True                   # prefer H.264 + AAC (opens in Premiere & co)
+FAST_TRIM = True                     # trim: cut at keyframes without re-encoding (fast) instead of frame-accurate
 LIVE_FROM_START = False              # live streams: record from the very start (yt-dlp --live-from-start)
 NOTIFY_SOUND = True                  # sound when a download is finished
 NOTIFY_VOL = 80                      # volume (0-100) of the "finished" sound
@@ -1228,7 +1238,8 @@ class QuietLogger:
     def debug(self, msg):
         if self.on_line:
             self.on_line(msg)
-        if not self._progress.match(self._ansi.sub("", msg).strip()):   # colour codes hid the progress lines
+        clean_msg = self._ansi.sub("", msg).strip()                     # colour codes hid the progress lines
+        if not self._progress.match(clean_msg) and "File locking is not supported" not in clean_msg:
             log(msg, "debug")
 
     def info(self, msg):
@@ -1344,6 +1355,13 @@ def watch_conversion(app, it, outdir, name, key, info, stop):
         expected = (info.get("duration") or 0) * 192000 / 8          # 192 kb/s MP3
     else:
         expected = size(info.get("filepath") or info.get("_filename") or "")
+    if expected <= 0 and it.get("final_base"):       # e.g. FixupM3u8: the file being repaired sits in the work folder
+        base = os.path.basename(it["final_base"]) + "."
+        try:
+            expected = max([size(os.path.join(d, f)) for d in work_dirs(outdir) for f in os.listdir(d)
+                            if f.startswith(base) and ".temp." not in f and not f.endswith((".part", ".ytdl"))] or [0])
+        except (OSError, ValueError):
+            expected = 0
     if expected <= 0:
         return                                    # unknown total: the bar keeps its text only
     t0 = time.time() - 2
@@ -1721,7 +1739,7 @@ def latest_ffmpeg():
 FFMPEG_ZIP = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 
-APP_VERSION = "1.3.0"
+APP_VERSION = "1.3.1"
 APP_REPO = "leclodo/Another-Video-Downloader"
 APP_RELEASES_URL = f"https://github.com/{APP_REPO}/releases"
 
@@ -1982,6 +2000,93 @@ def thumb_candidates(info):
 def setup_cols(frame):
     for i, w in COLS:
         frame.columnconfigure(i, minsize=w, weight=1 if i == 1 else 0)
+
+
+class ResMonitor:
+    """RAM / CPU used by the app and the programs it started (ffmpeg, deno). Windows only, no extra package."""
+
+    def __init__(self):
+        self.ok = sys.platform.startswith("win")
+        self.last = None                              # (wall time, cpu seconds)
+        self.ncpu = os.cpu_count() or 1
+        if self.ok:
+            try:
+                import ctypes
+                from ctypes import wintypes as wt
+                self.ct, self.wt = ctypes, wt
+                k = ctypes.WinDLL("kernel32", use_last_error=True)
+                k.OpenProcess.restype = wt.HANDLE
+                k.OpenProcess.argtypes = [wt.DWORD, wt.BOOL, wt.DWORD]
+                k.CloseHandle.argtypes = [wt.HANDLE]
+                k.CreateToolhelp32Snapshot.restype = wt.HANDLE
+                k.CreateToolhelp32Snapshot.argtypes = [wt.DWORD, wt.DWORD]
+                k.GetProcessTimes.argtypes = [wt.HANDLE] + [ctypes.c_void_p] * 4
+                k.Process32FirstW.argtypes = k.Process32NextW.argtypes = [wt.HANDLE, ctypes.c_void_p]
+                self.k = k
+                ps = ctypes.WinDLL("psapi", use_last_error=True)
+                ps.GetProcessMemoryInfo.argtypes = [wt.HANDLE, ctypes.c_void_p, wt.DWORD]
+
+                class PE(ctypes.Structure):
+                    _fields_ = [("dwSize", wt.DWORD), ("cntUsage", wt.DWORD), ("pid", wt.DWORD),
+                                ("heap", ctypes.c_size_t), ("mod", wt.DWORD), ("thr", wt.DWORD),
+                                ("ppid", wt.DWORD), ("pri", wt.LONG), ("flags", wt.DWORD), ("exe", wt.WCHAR * 260)]
+
+                class PMC(ctypes.Structure):
+                    _fields_ = [("cb", wt.DWORD), ("pf", wt.DWORD), ("peak", ctypes.c_size_t), ("ws", ctypes.c_size_t),
+                                ("a", ctypes.c_size_t), ("b", ctypes.c_size_t), ("c", ctypes.c_size_t),
+                                ("d", ctypes.c_size_t), ("priv", ctypes.c_size_t), ("e", ctypes.c_size_t)]
+                self.PE, self.PMC, self.ps = PE, PMC, ps
+            except Exception:
+                self.ok = False
+
+    def _tree(self):
+        ct = self.ct
+        snap = self.k.CreateToolhelp32Snapshot(0x2, 0)
+        kids, pids = {}, {os.getpid()}
+        try:
+            e = self.PE()
+            e.dwSize = ct.sizeof(e)
+            ok = self.k.Process32FirstW(snap, ct.byref(e))
+            while ok:
+                kids.setdefault(e.ppid, []).append(e.pid)
+                ok = self.k.Process32NextW(snap, ct.byref(e))
+        finally:
+            self.k.CloseHandle(snap)
+        todo = [os.getpid()]
+        while todo:
+            for c in kids.get(todo.pop(), []):
+                if c not in pids:
+                    pids.add(c)
+                    todo.append(c)
+        return pids
+
+    def sample(self):
+        """-> (ram bytes, cpu %), or None when unavailable."""
+        if not self.ok:
+            return None
+        ct = self.ct
+        pids = self._tree()
+        ram, cpu = 0, 0.0
+        for pid in pids:
+            h = self.k.OpenProcess(0x1000, False, pid)             # PROCESS_QUERY_LIMITED_INFORMATION
+            if not h:
+                continue
+            try:
+                pm = self.PMC()
+                pm.cb = ct.sizeof(pm)
+                if self.ps.GetProcessMemoryInfo(h, ct.byref(pm), pm.cb):
+                    ram += pm.priv
+                t = [ct.c_ulonglong() for _ in range(4)]
+                if self.k.GetProcessTimes(h, *[ct.byref(x) for x in t]):
+                    cpu += (t[2].value + t[3].value) / 1e7
+            finally:
+                self.k.CloseHandle(h)
+        now = time.monotonic()
+        pct = 0.0
+        if self.last and now > self.last[0]:
+            pct = max(0.0, (cpu - self.last[1]) / (now - self.last[0]) / self.ncpu * 100)
+        self.last = (now, cpu)
+        return ram, min(pct, 100.0)
 
 
 def lbl(parent, text="", size=11, color=None, bold=False, **kw):
@@ -2820,7 +2925,7 @@ class App(tk.Tk):
         self.trim_cbs = []
         self.ffmpeg_warn = None
         self.i18n = []                   # (widget, key, upper) re-translated on language switch
-        global LANG, DATE_FMT, NAME_TPL, SPEED_VALUE, SPEED_UNLIM, TRAY, LIVE_FROM_START, COMPAT_EDIT, VIDEO_CODEC, AUTO_RETRY, COOKIES_BROWSER
+        global LANG, DATE_FMT, NAME_TPL, SPEED_VALUE, SPEED_UNLIM, TRAY, LIVE_FROM_START, FAST_TRIM, COMPAT_EDIT, VIDEO_CODEC, AUTO_RETRY, COOKIES_BROWSER
         saved = load_settings()
         TRAY = bool(saved.get("tray"))
         global NOTIFY_SOUND, NOTIFY_TOAST, NOTIFY_TONE, NOTIFY_VOL, NOTIFY_STYLE
@@ -2830,6 +2935,7 @@ class App(tk.Tk):
         NOTIFY_SOUND = saved.get("notify_sound", saved.get("notify", True)) is not False
         NOTIFY_TOAST = saved.get("notify_toast", saved.get("notify", True)) is not False
         LIVE_FROM_START = bool(saved.get("live_start"))
+        FAST_TRIM = bool(saved.get("fast_trim", True))
         VIDEO_CODEC = saved.get("codec") or ("h264" if saved.get("compat_edit", True) is not False else "best")
         if VIDEO_CODEC not in ("h264", "best", "vp9", "av1"):
             VIDEO_CODEC = "h264"
@@ -3123,6 +3229,34 @@ class App(tk.Tk):
         if top is not None and str(event.widget).split(".")[1:2] != str(top).split(".")[1:2]:
             self._ctx_close()
 
+    def _res_start(self):
+        self._res_val = None
+        self._res_mon = ResMonitor()
+        if not self._res_mon.ok:
+            return
+
+        def work():
+            while True:
+                try:
+                    self._res_val = self._res_mon.sample()
+                except Exception:
+                    self._res_val = None
+                time.sleep(2)
+        threading.Thread(target=work, daemon=True).start()
+        self._res_show()
+
+    def _res_show(self):
+        v = self._res_val
+        if v:
+            ram, cpu = v
+            mb = ram / 1048576
+            unit = "Mo" if LANG == "fr" else "MB"
+            r = f"{mb / 1024:.1f} G{unit[-1]}" if mb >= 1024 else f"{mb:.0f} {unit}"
+            txt = f"RAM {r} · CPU {cpu:.0f} %"
+            if self.res_lbl.cget("text") != txt:
+                self.res_lbl.config(text=txt)
+        self.after(2000, self._res_show)
+
     def _build(self):
         # --- header: logo + title (centered), language switch (right)
         header = tk.Frame(self, bg=BG, height=48)
@@ -3137,6 +3271,10 @@ class App(tk.Tk):
         self.info_btn = RoundButton(header, "", self.show_info, small=True, style="secondary")
         self._t(self.info_btn, "info_btn")
         self.info_btn.pack(side="left")
+        self.res_lbl = lbl(header, "", 8, MUTED)                 # RAM / CPU used by the tool
+        self.res_lbl.pack(side="left", padx=(8, 0))
+        Tooltip(self.res_lbl, lambda: tr("tip_res"))
+        self._res_start()
         group = tk.Frame(header, bg=BG)
         group.place(relx=0.5, rely=0.5, anchor="center")
         logo = tk.Canvas(group, width=36, height=36, bg=BG, highlightthickness=0)
@@ -3712,6 +3850,13 @@ class App(tk.Tk):
             save_settings(live_start=LIVE_FROM_START)
         segmented(setting(pages["dl"], tr("set_live"), tr("live_hint")),
                   (("now", tr("live_now")), ("start", tr("live_start"))), "start" if LIVE_FROM_START else "now", set_live)
+
+        def set_trimmode(v):
+            global FAST_TRIM
+            FAST_TRIM = v == "fast"
+            save_settings(fast_trim=FAST_TRIM)
+        segmented(setting(pages["dl"], tr("set_trimmode"), tr("trimmode_hint")),
+                  (("exact", tr("trim_exact")), ("fast", tr("trim_fast"))), "fast" if FAST_TRIM else "exact", set_trimmode)
 
         def set_toast(v):
             global NOTIFY_TOAST
@@ -6133,6 +6278,10 @@ class App(tk.Tk):
         total = d.get("total_bytes") or d.get("total_bytes_estimate") or 0
         if not total:                                   # unknown size (live, streams): never cut
             return
+        inf = d.get("info_dict") or {}
+        if inf.get("protocol") not in ("https", "http") or d.get("fragment_count") \
+                or "youtube" not in str(inf.get("extractor_key") or inf.get("extractor") or "").lower():
+            return                                      # only plain YouTube downloads (not Twitch / HLS / DASH)
         if att["fn"] != fn:
             att.update(fn=fn, win=[], best=0.0)
         win = att["win"]
@@ -6371,7 +6520,8 @@ class App(tk.Tk):
         if it["start"] is not None or it["end"] is not None:
             end = it["end"] if it["end"] is not None else float("inf")
             opts["download_ranges"] = download_range_func(None, [(it["start"] or 0, end)])
-            opts["force_keyframes_in_cuts"] = True
+            opts["force_keyframes_in_cuts"] = not FAST_TRIM
+            log(f"trim {it['start']}-{it['end']} s, mode={'fast (keyframes, no re-encode)' if FAST_TRIM else 'exact (re-encode)'}")
 
         if it["cancel"]:
             raise Cancelled()
@@ -6394,6 +6544,20 @@ class App(tk.Tk):
             f"from_start={bool(it.get('live_from_start'))}, limit={SPEED_LIMIT:g} MB/s) -> {it['final_base']}")
         it["in_dl"] = True
         it["phase"] = "dl"
+        if (it["start"] is not None or it["end"] is not None) and not it.get("is_live") and q != "mp3":
+            try:
+                fast = self._twitch_fast(it, outdir, opts, name)
+            except (Cancelled, Declined):
+                it["in_dl"] = False
+                raise
+            except Exception:
+                log("twitch fast path failed, falling back on yt-dlp: " + traceback.format_exc(), "warning")
+                fast = None
+            if fast:
+                it["in_dl"] = False
+                drop_tmp_dir(outdir, video_key(it["url"]))
+                return fast
+            it["phase"] = "dl"
         def run_once():
             try:                                  # cookies cost seconds: only used when the video needs them
                 with yt_dlp.YoutubeDL(opts) as ydl:
@@ -6441,6 +6605,200 @@ class App(tk.Tk):
             f"ffmpeg={'yes' if shutil.which('ffmpeg') else 'no'}")
         reqs = (info or {}).get("requested_downloads") or []
         return reqs[0].get("filepath") if reqs else None
+
+    def _twitch_fast(self, it, outdir, opts, name):
+        """Twitch VOD + trim, TwitchDownloader style: reads the HLS playlist, downloads ONLY the segments covering
+        the range (8 in parallel), then cuts / assembles them with ffmpeg. Returns the final file path, or None
+        when this path does not apply or fails (the caller then falls back on yt-dlp)."""
+        ff = shutil.which("ffmpeg")
+        if not ff:
+            return None
+        flags = 0x08000000 if sys.platform.startswith("win") else 0
+        t_all = time.monotonic()
+        skip = ("progress_hooks", "postprocessor_hooks", "download_ranges", "force_keyframes_in_cuts", "postprocessors")
+        o2 = {k: v for k, v in opts.items() if k not in skip}
+        with yt_dlp.YoutubeDL(o2) as ydl:
+            info = ydl.extract_info(it["url"], download=False)
+        if not info or info.get("extractor_key") != "TwitchVod" or info.get("is_live") or info.get("requested_formats"):
+            return None
+        pl_url = info.get("url") or ""
+        if "m3u8" not in (info.get("protocol") or "") or not pl_url:
+            return None
+        hdrs = dict(info.get("http_headers") or {})
+        req = Request(pl_url, headers=hdrs)
+        with urlopen(req, timeout=30) as r:
+            text = r.read().decode("utf-8", "replace")
+        if "#EXT-X-STREAM-INF" in text or "#EXT-X-KEY" in text or "#EXT-X-MAP" in text or "#EXT-X-BYTERANGE" in text:
+            log("twitch fast path: playlist not supported, using yt-dlp", "info")
+            return None
+        segs, d = [], None
+        for line in text.splitlines():
+            line = line.strip()
+            if line.startswith("#EXTINF:"):
+                try:
+                    d = float(line[8:].split(",")[0])
+                except ValueError:
+                    d = None
+            elif line and not line.startswith("#") and d is not None:
+                segs.append((urljoin(pl_url, line), d))
+                d = None
+        if not segs:
+            return None
+        total = sum(x[1] for x in segs)
+        start = max(float(it["start"] or 0), 0.0)
+        end = min(float(it["end"]) if it["end"] is not None else total, total)
+        if end - start < 0.5:
+            return None
+        sel, t, first_t = [], 0.0, None
+        for url_, dur_ in segs:
+            if t + dur_ > start and t < end:
+                if first_t is None:
+                    first_t = t
+                sel.append(url_)
+            t += dur_
+        offset, length = start - first_t, end - start
+        n = len(sel)
+        tmpd = os.path.abspath(opts["paths"]["temp"])
+        plain = name.replace("%%", "%")
+        paths = [os.path.join(tmpd, f"{plain}.seg{i:05d}.ts") for i in range(n)]
+        lst = os.path.join(tmpd, f"{plain}.concat.txt")
+        out_tmp = os.path.join(tmpd, f"{plain}.fast.mp4")
+        log(f"twitch fast path: {n}/{len(segs)} segments for {start:.0f}-{end:.0f} s (cut at +{offset:.1f} s, "
+            f"{length:.1f} s), mode={'fast (copy)' if FAST_TRIM else 'exact (re-encode)'}")
+        made = it.setdefault("made", set())
+        lock = threading.Lock()
+        stat = {"bytes": 0, "done": 0, "win": [], "ref_t": time.monotonic(), "ref_b": 0, "ref_lim": SPEED_LIMIT}
+
+        def account(nb):
+            """Counts the bytes and returns how long to pause to respect the shared speed limit."""
+            now = time.monotonic()
+            with lock:
+                stat["bytes"] += nb
+                stat["win"].append((now, stat["bytes"]))
+                while len(stat["win"]) > 1 and now - stat["win"][0][0] > 5:
+                    stat["win"].pop(0)
+                if SPEED_LIMIT != stat["ref_lim"]:           # new limit: measure again from now
+                    stat["ref_lim"], stat["ref_t"], stat["ref_b"] = SPEED_LIMIT, now, stat["bytes"]
+                if SPEED_LIMIT <= 0:
+                    return 0.0
+                due = (stat["bytes"] - stat["ref_b"]) / (SPEED_LIMIT * 1048576)
+                return max(0.0, min(due - (now - stat["ref_t"]), 1.0))
+
+        def fetch(i):
+            path = paths[i]
+            if os.path.exists(path) and os.path.getsize(path) > 0:    # kept from an earlier (paused) run
+                return os.path.getsize(path)
+            last = None
+            for att in range(5):
+                if it["cancel"]:
+                    raise Cancelled()
+                got = 0
+                try:
+                    made.add(path + ".part")
+                    with urlopen(Request(sel[i], headers=hdrs), timeout=30) as r, open(path + ".part", "wb") as f:
+                        expected = int(r.headers.get("Content-Length") or 0)
+                        while True:
+                            if it["cancel"]:
+                                raise Cancelled()
+                            chunk = r.read(65536)
+                            if not chunk:
+                                break
+                            f.write(chunk)
+                            got += len(chunk)
+                            pause = account(len(chunk))
+                            if pause > 0:
+                                time.sleep(pause)
+                    if expected and got != expected:
+                        raise IOError(f"incomplete segment {i}: {got}/{expected}")
+                    if got == 0:
+                        raise IOError(f"empty segment {i}")
+                    os.replace(path + ".part", path)
+                    made.discard(path + ".part")
+                    return got
+                except Cancelled:
+                    raise
+                except Exception as ex:
+                    last = ex
+                    with lock:
+                        stat["bytes"] -= got                        # this attempt does not count
+                    time.sleep(1 + att)
+            raise last
+
+        it["phase"] = "dl"
+        t_dl = time.monotonic()
+        ex = ThreadPoolExecutor(max_workers=8)
+        try:
+            pending = {ex.submit(fetch, i) for i in range(n)}
+            done_n = 0
+            while pending:
+                if it["cancel"]:
+                    raise Cancelled()
+                dn, pending = futures_wait(pending, timeout=0.3, return_when=FIRST_COMPLETED)
+                for f in dn:
+                    f.result()                                      # re-raises a failure
+                    done_n += 1
+                with lock:
+                    w = stat["win"]
+                    spd = ((w[-1][1] - w[0][1]) / (w[-1][0] - w[0][0])) if len(w) > 1 and w[-1][0] > w[0][0] else 0.0
+                self.events.put(("progress", it, min(done_n / n * 95.0, 95.0), spd))
+        except BaseException:
+            for f in list(pending):
+                f.cancel()
+            raise
+        finally:
+            ex.shutdown(wait=True)
+        dl_time = max(time.monotonic() - t_dl, 0.001)
+        mb = stat["bytes"] / 1048576
+        log(f"twitch fast path: {n} segments downloaded, {mb:.1f} MB in {dl_time:.1f} s ({mb / dl_time:.2f} MB/s)")
+        if it["cancel"]:
+            raise Cancelled()
+
+        # assembly (not interruptible, like a merge)
+        it["phase"] = "pp"
+        self.events.put(("status", it, "merging" if FAST_TRIM else "converting"))
+        with open(lst, "w", encoding="utf-8") as f:
+            f.write("ffconcat version 1.0\n")
+            for pth in paths:
+                f.write("file '" + pth.replace("\\", "/").replace("'", "'\\''") + "'\n")
+        cmd = [ff, "-y", "-v", "error", "-nostdin", "-f", "concat", "-safe", "0", "-i", lst,
+               "-ss", f"{offset:.3f}", "-t", f"{length:.3f}"]
+        if FAST_TRIM:
+            cmd += ["-c", "copy", "-avoid_negative_ts", "make_zero", "-progress", "pipe:1"]
+        else:
+            cmd += ["-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p",
+                    "-c:a", "aac", "-b:a", "192k", "-progress", "pipe:1"]
+        cmd += ["-movflags", "+faststart", out_tmp]
+        log("twitch fast path: " + " ".join(cmd))
+        t_ff = time.monotonic()
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, creationflags=flags)
+        tail = []
+        for line in proc.stdout:
+            line = line.strip()
+            if line.startswith("out_time_us=") or line.startswith("out_time_ms="):
+                try:
+                    pct = min(99.0, float(line.split("=")[1]) / 1e6 / length * 100)
+                    self.events.put(("conv", it, "merging" if FAST_TRIM else "converting", pct))
+                except ValueError:
+                    pass
+            elif "=" not in line and line:
+                tail.append(line)
+        proc.wait()
+        if proc.returncode != 0 or not os.path.exists(out_tmp) or os.path.getsize(out_tmp) == 0:
+            raise RuntimeError("ffmpeg failed: " + " | ".join(tail[-5:]))
+        final = it["final_base"] + ".mp4"
+        os.replace(out_tmp, final)
+        for pth in paths + [lst]:
+            try:
+                os.remove(pth)
+            except OSError:
+                pass
+        it["made"] = {m for m in made if not m.startswith(tmpd)}
+        total_t = time.monotonic() - t_all
+        RECENT_DL.append((mb / dl_time, mb))
+        del RECENT_DL[:-20]
+        log(f"twitch fast path done: {total_t:.1f} s total | network {dl_time:.1f} s | ffmpeg {time.monotonic() - t_ff:.1f} s | "
+            f"{os.path.getsize(final) / 1048576:.1f} MB -> {final}")
+        return final
 
     def _ensure_compat(self, it, path):
         """Premiere-compatible file: re-encodes to H.264 / AAC when the download is VP9 / AV1 / Opus."""

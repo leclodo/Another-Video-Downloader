@@ -1,6 +1,6 @@
 ; Inno Setup script - built by build_installer.bat
 #define AppName "Another Video Downloader"
-#define AppVersion "1.3.0"
+#define AppVersion "1.3.1"
 #define AppExe "Another Video Downloader.exe"
 
 [Setup]
