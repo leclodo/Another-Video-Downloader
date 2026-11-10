@@ -6661,7 +6661,7 @@ class App(tk.Tk):
         tmpd = os.path.abspath(opts["paths"]["temp"])
         plain = name.replace("%%", "%")
         paths = [os.path.join(tmpd, f"{plain}.seg{i:05d}.ts") for i in range(n)]
-        lst = os.path.join(tmpd, f"{plain}.concat.txt")
+        joined = os.path.join(tmpd, f"{plain}.joined.ts")
         out_tmp = os.path.join(tmpd, f"{plain}.fast.mp4")
         log(f"twitch fast path: {n}/{len(segs)} segments for {start:.0f}-{end:.0f} s (cut at +{offset:.1f} s, "
             f"{length:.1f} s), mode={'fast (copy)' if FAST_TRIM else 'exact (re-encode)'}")
@@ -6756,11 +6756,53 @@ class App(tk.Tk):
         # assembly (not interruptible, like a merge)
         it["phase"] = "pp"
         self.events.put(("status", it, "merging" if FAST_TRIM else "converting"))
-        with open(lst, "w", encoding="utf-8") as f:
-            f.write("ffconcat version 1.0\n")
-            for pth in paths:
-                f.write("file '" + pth.replace("\\", "/").replace("'", "'\\''") + "'\n")
-        cmd = [ff, "-y", "-v", "error", "-nostdin", "-f", "concat", "-safe", "0", "-i", lst,
+        # The segments are joined byte for byte (like a plain HLS download): ffmpeg's concat demuxer rewrites the
+        # timestamps segment by segment, which made the audio drift away from the video over long ranges.
+        made.add(joined)
+        with open(joined, "wb") as out_f:
+            for i, pth in enumerate(paths):
+                with open(pth, "rb") as sf:
+                    shutil.copyfileobj(sf, out_f, 4 * 1024 * 1024)
+                os.remove(pth)                                      # frees the disk as we go
+                if i % 10 == 0:
+                    self.events.put(("conv", it, "merging" if FAST_TRIM else "converting", (i + 1) / n * 20))
+        if FAST_TRIM:
+            # Stream copy: start exactly on a video keyframe. Cutting between two keyframes leaves the video starting
+            # before the audio (edit list), which Premiere ignores -> audio out of sync there.
+            try:
+                fp = shutil.which("ffprobe")
+                if fp:
+                    out = subprocess.run(
+                        [fp, "-v", "error", "-i", joined, "-select_streams", "v:0",
+                         "-show_entries", "packet=dts_time,flags", "-of", "csv=p=0",
+                         "-read_intervals", f"%+{offset + 30:.3f}"],
+                        capture_output=True, text=True, timeout=120, creationflags=flags).stdout
+                    st_out = subprocess.run([fp, "-v", "error", "-i", joined, "-show_entries", "stream=start_time",
+                                             "-of", "csv=p=0"], capture_output=True, text=True, timeout=60,
+                                            creationflags=flags).stdout
+                    starts = []
+                    for ln in st_out.split():
+                        try:
+                            starts.append(float(ln.strip(",")))
+                        except ValueError:
+                            pass
+                    base_t, kf = (min(starts) if starts else 0.0), None      # ffmpeg's time 0 = earliest stream start
+                    for ln in out.splitlines():
+                        parts = ln.strip().split(",")
+                        if len(parts) >= 2 and "K" in parts[1] and kf is None:      # dts_time,flags
+                            try:
+                                t_ = float(parts[0]) - base_t
+                            except ValueError:
+                                continue
+                            if t_ >= offset - 0.001:
+                                kf = t_
+                    if kf is not None and kf - offset < 30:
+                        log(f"twitch fast path: cut moved to the keyframe at +{kf:.3f} s (asked +{offset:.3f} s)")
+                        length = max(length - (kf - offset), 0.5)
+                        offset = math.floor(kf * 1000) / 1000
+            except Exception:
+                log("twitch fast path: keyframe lookup failed, cutting at the asked time", "warning")
+        cmd = [ff, "-y", "-v", "error", "-nostdin", "-i", joined,
                "-ss", f"{offset:.3f}", "-t", f"{length:.3f}"]
         if FAST_TRIM:
             cmd += ["-c", "copy", "-avoid_negative_ts", "make_zero", "-progress", "pipe:1"]
@@ -6776,7 +6818,7 @@ class App(tk.Tk):
             line = line.strip()
             if line.startswith("out_time_us=") or line.startswith("out_time_ms="):
                 try:
-                    pct = min(99.0, float(line.split("=")[1]) / 1e6 / length * 100)
+                    pct = min(99.0, 20 + float(line.split("=")[1]) / 1e6 / length * 80)
                     self.events.put(("conv", it, "merging" if FAST_TRIM else "converting", pct))
                 except ValueError:
                     pass
@@ -6787,7 +6829,7 @@ class App(tk.Tk):
             raise RuntimeError("ffmpeg failed: " + " | ".join(tail[-5:]))
         final = it["final_base"] + ".mp4"
         os.replace(out_tmp, final)
-        for pth in paths + [lst]:
+        for pth in [joined]:
             try:
                 os.remove(pth)
             except OSError:
