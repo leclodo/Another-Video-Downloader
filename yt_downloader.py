@@ -28,6 +28,7 @@ import webbrowser
 from tkinter import filedialog, messagebox, ttk
 from concurrent.futures import ThreadPoolExecutor, wait as futures_wait, FIRST_COMPLETED
 from urllib.parse import parse_qs, urljoin, urlparse
+from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 # Windowed builds (.pyw / PyInstaller --windowed) have no stdout/stderr: give libraries a sink.
@@ -1739,7 +1740,7 @@ def latest_ffmpeg():
 FFMPEG_ZIP = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 
-APP_VERSION = "1.3.1"
+APP_VERSION = "1.3.2"
 APP_REPO = "leclodo/Another-Video-Downloader"
 APP_RELEASES_URL = f"https://github.com/{APP_REPO}/releases"
 
@@ -2087,6 +2088,84 @@ class ResMonitor:
             pct = max(0.0, (cpu - self.last[1]) / (now - self.last[0]) / self.ncpu * 100)
         self.last = (now, cpu)
         return ram, min(pct, 100.0)
+
+
+def mp4_http_range(url, a, b, hdrs):
+    """Opens bytes a..b of a YouTube media URL (Range header first, then the `range=` parameter as a fallback)."""
+    try:
+        return urlopen(Request(url, headers={**hdrs, "Range": f"bytes={a}-{b}"}), timeout=30)
+    except HTTPError as e:
+        if e.code not in (403, 416):
+            raise
+    sep = "&" if "?" in url else "?"
+    return urlopen(Request(f"{url}{sep}range={a}-{b}", headers=hdrs), timeout=30)
+
+
+def parse_sidx(box):
+    """Parses a whole 'sidx' box -> (first_offset, [(t0, t1, offset, size, starts_with_sap)]) or None."""
+    p = 16 if int.from_bytes(box[0:4], "big") == 1 else 8
+    ver = box[p]
+    p += 8                                                   # version/flags + reference_ID
+    timescale = int.from_bytes(box[p:p + 4], "big")
+    p += 4
+    if ver == 0:
+        ept, first = int.from_bytes(box[p:p + 4], "big"), int.from_bytes(box[p + 4:p + 8], "big")
+        p += 8
+    else:
+        ept, first = int.from_bytes(box[p:p + 8], "big"), int.from_bytes(box[p + 8:p + 16], "big")
+        p += 16
+    cnt = int.from_bytes(box[p + 2:p + 4], "big")
+    p += 4
+    if not timescale or not cnt:
+        return None
+    refs, off, t = [], 0, ept
+    for _ in range(cnt):
+        w = int.from_bytes(box[p:p + 4], "big")
+        dur = int.from_bytes(box[p + 4:p + 8], "big")
+        sap = int.from_bytes(box[p + 8:p + 12], "big") >> 31
+        p += 12
+        if w >> 31:                                          # hierarchical index: not handled
+            return None
+        refs.append((t / timescale, (t + dur) / timescale, off, w & 0x7FFFFFFF, bool(sap)))
+        off += w & 0x7FFFFFFF
+        t += dur
+    return first, refs
+
+
+def read_mp4_index(url, hdrs, size_hint=0):
+    """Reads the start of a fragmented MP4 (DASH) file: returns (init bytes, [(t0, t1, abs_offset, size, sap)])."""
+    data = b""
+
+    def ensure(n):
+        nonlocal data
+        if n > 32 * 1048576:
+            raise ValueError("index too far")
+        while len(data) < n:
+            a = len(data)
+            with mp4_http_range(url, a, max(n, a + 262144) - 1, hdrs) as r:
+                chunk = r.read()
+            if not chunk:
+                raise ValueError("file too short")
+            data += chunk
+    ensure(65536)
+    pos = 0
+    while True:
+        ensure(pos + 16)
+        size = int.from_bytes(data[pos:pos + 4], "big")
+        typ = data[pos + 4:pos + 8]
+        if size == 1:
+            size = int.from_bytes(data[pos + 8:pos + 16], "big")
+        if size < 8 or typ in (b"moof", b"mdat"):
+            raise ValueError("no sidx before the media data")
+        if typ == b"sidx":
+            ensure(pos + size)
+            parsed = parse_sidx(data[pos:pos + size])
+            if not parsed:
+                raise ValueError("unsupported sidx")
+            first, refs = parsed
+            base = pos + size + first
+            return data[:pos], [(t0, t1, base + o, sz, sap) for t0, t1, o, sz, sap in refs]
+        pos += size
 
 
 def lbl(parent, text="", size=11, color=None, bold=False, **kw):
@@ -6293,6 +6372,8 @@ class App(tk.Tk):
             return
         if st["slept"] - win[0][2] > 0.1 * span:        # our own speed limiter was holding the download back
             return
+        if st["restarts"] and now - st["last_restart"] < 25:    # leave a fresh connection time to settle
+            return
         cur = (done - win[0][1]) / span / 1048576
         att["best"] = max(att["best"], cur)
         best = att["best"]
@@ -6308,6 +6389,7 @@ class App(tk.Tk):
             log(f"slow connection persists after {st['restarts']} reconnection(s): keeping the current one", "warning")
             return
         st["restarts"] += 1
+        st["last_restart"] = now
         st["prev_best"] = best
         log(f"speed dropped to {cur:.2f} MB/s (best {best:.1f} MB/s) at {done / 1048576:.0f}/{total / 1048576:.0f} MB: "
             f"reconnecting and resuming (#{st['restarts']})", "warning")
@@ -6319,7 +6401,7 @@ class App(tk.Tk):
         st = {"t_start": time.monotonic(), "slept": 0.0, "seen": set(), "pp": {}, "pp_total": 0.0,
               "bytes": 0, "dl_time": 0.0, "last_limit": SPEED_LIMIT, "peak": 0.0,
               "att": {"t0": time.monotonic(), "win": [], "best": 0.0, "fn": None},
-              "restarts": 0, "noimp": 0, "no_more": False, "prev_best": None}
+              "restarts": 0, "noimp": 0, "no_more": False, "prev_best": None, "n403": 0, "last_restart": 0.0}
 
         def throttle(d):
             """Own speed limit: yt-dlp's built-in one undershoots badly with YouTube's chunked downloads
@@ -6547,11 +6629,13 @@ class App(tk.Tk):
         if (it["start"] is not None or it["end"] is not None) and not it.get("is_live") and q != "mp3":
             try:
                 fast = self._twitch_fast(it, outdir, opts, name)
+                if not fast:
+                    fast = self._youtube_fast(it, outdir, opts, name)
             except (Cancelled, Declined):
                 it["in_dl"] = False
                 raise
             except Exception:
-                log("twitch fast path failed, falling back on yt-dlp: " + traceback.format_exc(), "warning")
+                log("fast trim path failed, falling back on yt-dlp: " + traceback.format_exc(), "warning")
                 fast = None
             if fast:
                 it["in_dl"] = False
@@ -6588,6 +6672,19 @@ class App(tk.Tk):
                     if it["cancel"]:
                         raise Cancelled()
                     continue
+                except yt_dlp.utils.DownloadError as ex:
+                    # YouTube sometimes answers 403 when a resumed connection comes right after another one:
+                    # wait a little, then retry with fresh links (the .part file is kept).
+                    if "HTTP Error 403" not in str(ex) or st["n403"] >= 4 or it["cancel"] or self.stop_requested:
+                        raise
+                    st["n403"] += 1
+                    wait_s = 5 * st["n403"]
+                    log(f"HTTP 403 while resuming: waiting {wait_s} s then retrying ({st['n403']}/4)", "warning")
+                    for _ in range(wait_s * 4):
+                        if it["cancel"] or self.stop_requested:
+                            raise Cancelled()
+                        time.sleep(0.25)
+                    continue
         finally:
             it["in_dl"] = False
             drop_tmp_dir(outdir, video_key(it["url"]))   # only removed when empty: a paused download keeps its files
@@ -6606,12 +6703,228 @@ class App(tk.Tk):
         reqs = (info or {}).get("requested_downloads") or []
         return reqs[0].get("filepath") if reqs else None
 
+    def _youtube_fast(self, it, outdir, opts, name):
+        """YouTube + trim: reads the index (sidx) of the video and audio files, downloads ONLY the fragments covering
+        the range, in parallel and with a real progress, then cuts / muxes them with ffmpeg. Returns the final path,
+        or None when it does not apply or fails (the caller then falls back on yt-dlp's own ffmpeg download)."""
+        ff = shutil.which("ffmpeg")
+        if not ff or not re.search(r"youtu(\.be|be\.com)", it["url"]):
+            return None
+        flags = 0x08000000 if sys.platform.startswith("win") else 0
+        t_all = time.monotonic()
+        skip = ("progress_hooks", "postprocessor_hooks", "download_ranges", "force_keyframes_in_cuts", "postprocessors")
+        o2 = {k: v for k, v in opts.items() if k not in skip}
+        with yt_dlp.YoutubeDL(o2) as ydl:
+            info = ydl.extract_info(it["url"], download=False)
+        if not info or info.get("is_live") or info.get("extractor_key") != "Youtube":
+            return None
+        fmts = info.get("requested_formats") or [info]
+        if len(fmts) > 2:
+            return None
+        for f in fmts:
+            if f.get("protocol") not in ("https", "http") or f.get("ext") not in ("mp4", "m4a") or not f.get("url") \
+                    or f.get("fragments"):
+                log(f"youtube fast path: format {f.get('format_id')} ({f.get('ext')}/{f.get('protocol')}) not supported, using yt-dlp")
+                return None
+        vf = fmts[0]
+        af = fmts[1] if len(fmts) > 1 else None
+        if af is not None and vf.get("vcodec") in (None, "none"):
+            vf, af = af, vf
+        # indexes
+        v_init, v_refs = read_mp4_index(vf["url"], dict(vf.get("http_headers") or {}))
+        a_init = a_refs = None
+        if af is not None:
+            a_init, a_refs = read_mp4_index(af["url"], dict(af.get("http_headers") or {}))
+        total_dur = v_refs[-1][1]
+        start = max(float(it["start"] or 0), 0.0)
+        end = min(float(it["end"]) if it["end"] is not None else total_dur, total_dur)
+        if end - start < 0.5:
+            return None
+        v_sel = [r for r in v_refs if r[1] > start and r[0] < end]
+        if not v_sel or not v_sel[0][4]:                       # must begin on a keyframe
+            return None
+        v_first = v_sel[0][0]
+        a_sel = []
+        if a_refs is not None:
+            a_sel = [r for r in a_refs if r[1] > v_first and r[0] < end]
+            if not a_sel:
+                return None
+        a_off = (v_first - a_sel[0][0]) if a_sel else 0.0
+        length = end - v_first if FAST_TRIM else end - start
+        tmpd = os.path.abspath(opts["paths"]["temp"])
+        plain = name.replace("%%", "%")
+        made = it.setdefault("made", set())
+
+        def chunks(sel, tag):
+            out, a, b = [], sel[0][2], sel[0][2]
+            for r in sel:
+                if r[2] + r[3] - a > 8 * 1048576 and r[2] > a:      # chunks of ~8 MB, like yt-dlp's own
+                    out.append((a, b - 1))
+                    a = r[2]
+                b = r[2] + r[3]
+            out.append((a, b - 1))
+            return [(tag, i, x, y) for i, (x, y) in enumerate(out)]
+        tasks = chunks(v_sel, "v") + (chunks(a_sel, "a") if a_sel else [])
+        total_b = sum(y - x + 1 for _, _, x, y in tasks)
+        log(f"youtube fast path: {len(v_sel)} video + {len(a_sel)} audio fragments, {total_b / 1048576:.0f} MB "
+            f"for {start:.0f}-{end:.0f} s (starts at the keyframe {v_first:.1f} s), "
+            f"mode={'fast (copy)' if FAST_TRIM else 'exact (re-encode)'}")
+        urls = {"v": (vf["url"], dict(vf.get("http_headers") or {})), "a": ((af or {}).get("url"), dict((af or {}).get("http_headers") or {}))}
+        lock = threading.Lock()
+        stat = {"bytes": 0, "win": [], "ref_t": time.monotonic(), "ref_b": 0, "ref_lim": SPEED_LIMIT}
+
+        def account(nb):
+            now = time.monotonic()
+            with lock:
+                stat["bytes"] += nb
+                stat["win"].append((now, stat["bytes"]))
+                while len(stat["win"]) > 1 and now - stat["win"][0][0] > 5:
+                    stat["win"].pop(0)
+                if SPEED_LIMIT != stat["ref_lim"]:
+                    stat["ref_lim"], stat["ref_t"], stat["ref_b"] = SPEED_LIMIT, now, stat["bytes"]
+                if SPEED_LIMIT <= 0:
+                    return 0.0
+                due = (stat["bytes"] - stat["ref_b"]) / (SPEED_LIMIT * 1048576)
+                return max(0.0, min(due - (now - stat["ref_t"]), 1.0))
+
+        def cpath(tag, i):
+            return os.path.join(tmpd, f"{plain}.{tag}{i:05d}.chunk")
+
+        def fetch(task):
+            tag, i, a, b = task
+            path, want = cpath(tag, i), b - a + 1
+            if os.path.exists(path) and os.path.getsize(path) == want:
+                account(want)
+                return
+            url, hdrs = urls[tag]
+            last = None
+            for att in range(5):
+                if it["cancel"]:
+                    raise Cancelled()
+                got = 0
+                try:
+                    made.add(path + ".part")
+                    with mp4_http_range(url, a, b, hdrs) as r, open(path + ".part", "wb") as f:
+                        while True:
+                            if it["cancel"]:
+                                raise Cancelled()
+                            chunk = r.read(65536)
+                            if not chunk:
+                                break
+                            f.write(chunk)
+                            got += len(chunk)
+                            pause = account(len(chunk))
+                            if pause > 0:
+                                time.sleep(pause)
+                    if got != want:
+                        raise IOError(f"incomplete chunk {tag}{i}: {got}/{want}")
+                    os.replace(path + ".part", path)
+                    made.discard(path + ".part")
+                    return
+                except Cancelled:
+                    raise
+                except Exception as ex:
+                    last = ex
+                    with lock:
+                        stat["bytes"] -= got
+                    time.sleep(1 + att)
+            raise last
+
+        it["phase"] = "dl"
+        t_dl = time.monotonic()
+        ex = ThreadPoolExecutor(max_workers=8)
+        pending = set()
+        try:
+            pending = {ex.submit(fetch, t) for t in tasks}
+            while pending:
+                if it["cancel"]:
+                    raise Cancelled()
+                dn, pending = futures_wait(pending, timeout=0.3, return_when=FIRST_COMPLETED)
+                for f in dn:
+                    f.result()
+                with lock:
+                    w = stat["win"]
+                    spd = ((w[-1][1] - w[0][1]) / (w[-1][0] - w[0][0])) if len(w) > 1 and w[-1][0] > w[0][0] else 0.0
+                    got_b = stat["bytes"]
+                self.events.put(("progress", it, min(got_b / total_b * 85.0, 85.0), spd))
+        except BaseException:
+            for f in list(pending):
+                f.cancel()
+            raise
+        finally:
+            ex.shutdown(wait=True)
+        dl_time = max(time.monotonic() - t_dl, 0.001)
+        mb = total_b / 1048576
+        log(f"youtube fast path: {mb:.1f} MB downloaded in {dl_time:.1f} s ({mb / dl_time:.2f} MB/s)")
+        if it["cancel"]:
+            raise Cancelled()
+
+        it["phase"] = "pp"
+        self.events.put(("status", it, "merging" if FAST_TRIM else "converting"))
+
+        def build(tag, init, count):
+            outp = os.path.join(tmpd, f"{plain}.{tag}.mp4")
+            made.add(outp)
+            with open(outp, "wb") as o:
+                o.write(init)
+                for i in range(count):
+                    pth = cpath(tag, i)
+                    with open(pth, "rb") as sf:
+                        shutil.copyfileobj(sf, o, 4 * 1024 * 1024)
+                    os.remove(pth)
+            return outp
+        nv = sum(1 for t in tasks if t[0] == "v")
+        vfile = build("v", v_init, nv)
+        afile = build("a", a_init, len(tasks) - nv) if a_sel else None
+        self.events.put(("conv", it, "merging" if FAST_TRIM else "converting", 88.0))
+        out_tmp = os.path.join(tmpd, f"{plain}.yt.mp4")
+        cmd = [ff, "-y", "-v", "error", "-nostdin", "-i", vfile]
+        if afile:
+            cmd += ["-ss", f"{a_off:.3f}", "-i", afile, "-map", "0:v:0", "-map", "1:a:0"]
+        if FAST_TRIM:
+            cmd += ["-t", f"{length:.3f}", "-c", "copy", "-avoid_negative_ts", "make_zero"]
+        else:
+            cmd += ["-ss", f"{start - v_first:.3f}", "-t", f"{length:.3f}", "-c:v", "libx264", "-preset", "veryfast",
+                    "-crf", "18", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k"]
+        cmd += ["-progress", "pipe:1", "-movflags", "+faststart", out_tmp]
+        log("youtube fast path: " + " ".join(cmd))
+        t_ff = time.monotonic()
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, creationflags=flags)
+        tail = []
+        for line in proc.stdout:
+            line = line.strip()
+            if line.startswith("out_time_us=") or line.startswith("out_time_ms="):
+                try:
+                    pct = min(99.0, 88 + float(line.split("=")[1]) / 1e6 / max(length, 1) * 11)
+                    self.events.put(("conv", it, "merging" if FAST_TRIM else "converting", pct))
+                except ValueError:
+                    pass
+            elif "=" not in line and line:
+                tail.append(line)
+        proc.wait()
+        if proc.returncode != 0 or not os.path.exists(out_tmp) or os.path.getsize(out_tmp) == 0:
+            raise RuntimeError("ffmpeg failed: " + " | ".join(tail[-5:]))
+        final = it["final_base"] + ".mp4"
+        os.replace(out_tmp, final)
+        for pth in [vfile, afile]:
+            try:
+                if pth:
+                    os.remove(pth)
+            except OSError:
+                pass
+        it["made"] = {m for m in made if not m.startswith(tmpd)}
+        RECENT_DL.append((mb / dl_time, mb))
+        del RECENT_DL[:-20]
+        log(f"youtube fast path done: {time.monotonic() - t_all:.1f} s total | network {dl_time:.1f} s | "
+            f"ffmpeg {time.monotonic() - t_ff:.1f} s | {os.path.getsize(final) / 1048576:.1f} MB -> {final}")
+        return final
+
     def _twitch_fast(self, it, outdir, opts, name):
         """Twitch VOD + trim, TwitchDownloader style: reads the HLS playlist, downloads ONLY the segments covering
         the range (8 in parallel), then cuts / assembles them with ffmpeg. Returns the final file path, or None
         when this path does not apply or fails (the caller then falls back on yt-dlp)."""
         ff = shutil.which("ffmpeg")
-        if not ff:
+        if not ff or "twitch.tv" not in it["url"]:
             return None
         flags = 0x08000000 if sys.platform.startswith("win") else 0
         t_all = time.monotonic()
