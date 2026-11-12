@@ -20,7 +20,7 @@ Une interface graphique simple pour [yt-dlp](https://github.com/yt-dlp/yt-dlp) :
 ### Découpe (trim)
 - Début / fin avant ou après l'ajout à la file, modifiable à tout moment ; un lien avec un timer (`?t=90`) préremplit le début
 - Réglage **Précise / Rapide** : *Rapide* (par défaut) coupe sur les images clés sans ré-encoder, *Précise* coupe à l'image près
-- **VODs Twitch très rapides** : seuls les segments utiles sont téléchargés en parallèle (8 à la fois), puis assemblés avec ffmpeg ; retour automatique à yt-dlp en cas d'échec
+- **Découpes très rapides sur YouTube et Twitch** : seuls les morceaux utiles de la vidéo sont téléchargés en parallèle, avec une vraie barre de progression, puis assemblés avec ffmpeg ; retour automatique à yt-dlp en cas d'échec. Son et image restent synchronisés, même dans Premiere
 
 ### File d'attente et playlists
 - Plusieurs téléchargements, pause / reprise, réordonnancement par glisser-déposer, tri par colonne, sauvegarde automatique entre deux lancements
@@ -96,7 +96,7 @@ A simple graphical interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp): pas
 #### Trimming
 - Start / end before or after adding to the queue, editable at any time; a link with a timestamp (`?t=90`) pre-fills the start
 - **Precise / Fast** setting: *Fast* (default) cuts on keyframes without re-encoding, *Precise* cuts frame-accurately
-- **Very fast Twitch VODs**: only the needed segments are downloaded in parallel (8 at a time), then assembled with ffmpeg; automatic fallback to yt-dlp if it fails
+- **Very fast trims on YouTube and Twitch**: only the needed parts of the video are downloaded in parallel, with a real progress bar, then assembled with ffmpeg; automatic fallback to yt-dlp if it fails. Audio and video stay in sync, even in Premiere
 
 #### Queue and playlists
 - Several downloads, pause / resume, drag-and-drop reordering, sorting by column, saved automatically between launches
