@@ -1740,7 +1740,7 @@ def latest_ffmpeg():
 FFMPEG_ZIP = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 
-APP_VERSION = "1.3.2"
+APP_VERSION = "1.3.3"
 APP_REPO = "leclodo/Another-Video-Downloader"
 APP_RELEASES_URL = f"https://github.com/{APP_REPO}/releases"
 
@@ -3177,6 +3177,8 @@ class App(tk.Tk):
                 item = item_from_json(d)
                 if not item.get("url"):
                     continue
+                if not item.get("outdir"):            # older queue: lines followed the global folder
+                    item["outdir"] = self.outdir.get()
                 row = QueueRow(self.list_frame, item, self)
                 row.pack(fill="x")
                 item["row"] = row
@@ -5742,7 +5744,7 @@ class App(tk.Tk):
             color = PL_COLORS[self.pl_count % len(PL_COLORS)]   # one colour per playlist added
             self.pl_count += 1
             for e in chosen:
-                item = {**e, "pl_color": color, "playlist": c["title"], "name": make_name(e), "trimmed": False, "custom": False, "outdir": None,
+                item = {**e, "pl_color": color, "playlist": c["title"], "name": make_name(e), "trimmed": False, "custom": False, "outdir": self.outdir.get(),
                         "quality": q, "qualities": list(self.quality_keys), "start": None, "end": None,
                         "no_trim": True, "status": "waiting", "cancel": False}
                 row = QueueRow(self.list_frame, item, self)
@@ -5777,7 +5779,7 @@ class App(tk.Tk):
                 # default file name from the template in the settings (e.g. "{title} - {channel}")
                 "name": make_name(c) + (tr("trim_suffix") if trimmed else ""),
                 "trimmed": trimmed, "custom": False,
-                "outdir": None,  # None = follow the global folder
+                "outdir": self.outdir.get(),  # folder chosen when the line is added (later changes don't move it)
                 "quality": self.quality_keys[self.quality.current()],
                 "qualities": list(self.quality_keys),
                 "start": start, "end": end, "status": "waiting", "cancel": False}
